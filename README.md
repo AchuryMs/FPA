@@ -7,6 +7,7 @@ El sistema tiene como objetivo **gestionar la transacción de acciones** dentro 
 ---
 
 ## 🧩 Objetivo general
+
 Desarrollar un **sistema distribuido** que permita la **simulación, gestión y consolidación de transacciones bursátiles**, garantizando modularidad, mantenibilidad y escalabilidad limitada según el alcance académico del proyecto.
 
 ---
@@ -26,70 +27,69 @@ Desarrollar un **sistema distribuido** que permita la **simulación, gestión y 
 
 ## 🏗️ Estructura del repositorio
 
+```
 andina-trading/
-├── frontend/ # Portal del Inversionista (React)
-│ ├── public/
-│ ├── src/
-│ │ ├── assets/
-│ │ ├── components/
-│ │ ├── pages/
-│ │ ├── services/ # conexión al backend (axios / fetch)
-│ │ ├── hooks/
-│ │ ├── context/
-│ │ └── App.jsx
-│ ├── package.json
-│ ├── vite.config.js
-│ └── .env.example
+├── frontend/                    # Portal del Inversionista (React)
+│   ├── public/
+│   ├── src/
+│   │   ├── assets/
+│   │   ├── components/
+│   │   ├── pages/
+│   │   ├── services/           # conexión al backend (axios / fetch)
+│   │   ├── hooks/
+│   │   ├── context/
+│   │   └── App.jsx
+│   ├── package.json
+│   ├── vite.config.js
+│   └── .env.example
 │
-├── backend/ # API y microservicios
-│ ├── gateway/ # API Gateway
-│ │ ├── src/
-│ │ │ ├── routes/
-│ │ │ ├── middlewares/
-│ │ │ ├── controllers/
-│ │ │ └── app.js
-│ │ ├── package.json
-│ │ └── .env.example
-│ │
-│ ├── services/
-│ │ ├── auth-service/ # Login y gestión de usuarios
-│ │ ├── investor-service/ # Gestión de inversionistas y contratos
-│ │ ├── broker-service/ # Gestión de comisionistas
-│ │ ├── stock-service/ # Conexión con la bolsa
-│ │ └── report-service/ # Generación de reportes
-│ │
-│ ├── common/ # Código compartido entre servicios
-│ │ ├── utils/
-│ │ ├── constants/
-│ │ ├── types/
-│ │ └── database/
-│ │ ├── db.js # Conexión MySQL central
-│ │ └── models/
-│ │
-│ └── docker-compose.yml # Orquestación backend (futuro)
+├── backend/                     # API y microservicios
+│   ├── gateway/                # API Gateway
+│   │   ├── src/
+│   │   │   ├── routes/
+│   │   │   ├── middlewares/
+│   │   │   ├── controllers/
+│   │   │   └── app.js
+│   │   ├── package.json
+│   │   └── .env.example
+│   │
+│   ├── services/
+│   │   ├── auth-service/       # Login y gestión de usuarios
+│   │   ├── investor-service/   # Gestión de inversionistas y contratos
+│   │   ├── broker-service/     # Gestión de comisionistas
+│   │   ├── stock-service/      # Conexión con la bolsa
+│   │   └── report-service/     # Generación de reportes
+│   │
+│   ├── common/                 # Código compartido entre servicios
+│   │   ├── utils/
+│   │   ├── constants/
+│   │   ├── types/
+│   │   └── database/
+│   │       ├── db.js           # Conexión MySQL central
+│   │       └── models/
+│   │
+│   └── docker-compose.yml      # Orquestación backend (futuro)
 │
 ├── database/
-│ ├── init.sql # Script de creación de tablas
-│ ├── seed.sql # Datos iniciales
-│ └── README.md
+│   ├── init.sql                # Script de creación de tablas
+│   ├── seed.sql                # Datos iniciales
+│   └── README.md
 │
-├── docs/ # Documentación del proyecto
-│ ├── arquitectura.md
-│ ├── requerimientos.md
-│ ├── plan-calidad.md
-│ └── presentacion.pptx
+├── docs/                        # Documentación del proyecto
+│   ├── arquitectura.md
+│   ├── requerimientos.md
+│   ├── plan-calidad.md
+│   └── presentacion.pptx
 │
-├── scripts/ # Utilidades de desarrollo y despliegue
-│ ├── start-dev.sh
-│ ├── test-all.sh
-│ └── build-all.sh
+├── scripts/                     # Utilidades de desarrollo y despliegue
+│   ├── start-dev.sh
+│   ├── test-all.sh
+│   └── build-all.sh
 │
 ├── .gitignore
 ├── README.md
 └── LICENSE
-
-yaml
-Copiar código
+```
 
 ---
 
@@ -110,62 +110,63 @@ Copiar código
 ## 🧠 Convenciones de trabajo
 
 ### Ramas
-main # Rama estable
-dev # Integración de features
-feature/<nombre> # Nuevas funciones
-fix/<nombre> # Correcciones
-docs/<tema> # Documentación
 
-shell
-Copiar código
+```
+main                  # Rama estable
+dev                   # Integración de features
+feature/<nombre>      # Nuevas funciones
+fix/<nombre>          # Correcciones
+docs/<tema>           # Documentación
+```
 
 ### Commits
+
 Usar prefijos estandarizados:
+
+```
 feat: nueva funcionalidad
 fix: corrección de errores
 docs: cambios en documentación
 refactor: mejora de código
 chore: tareas menores o mantenimiento
-
-yaml
-Copiar código
+```
 
 ---
 
 ## ⚡ Configuración de entorno
 
 ### Variables para backend
+
 Archivo `.env` en cada servicio:
+
+```env
 DB_HOST=localhost
 DB_USER=root
 DB_PASS=admin
 DB_NAME=andina_trading
 DB_PORT=3306
 PORT=3001
-
-bash
-Copiar código
+```
 
 ### Variables para frontend
-Archivo `.env`:
-VITE_API_URL=http://localhost:3000
 
-yaml
-Copiar código
+Archivo `.env`:
+
+```env
+VITE_API_URL=http://localhost:3000
+```
 
 ---
 
 ## 🧩 Próximos pasos
-1. Implementar la conexión con **MySQL** desde `backend/common/database/db.js`.  
-2. Crear los **endpoints REST** en el `gateway` y servicios.  
-3. Conectar el **frontend** al backend usando `axios`.  
-4. Integrar **Docker Compose** para levantar el entorno completo.  
+
+1. Implementar la conexión con **MySQL** desde `backend/common/database/db.js`.
+2. Crear los **endpoints REST** en el `gateway` y servicios.
+3. Conectar el **frontend** al backend usando `axios`.
+4. Integrar **Docker Compose** para levantar el entorno completo.
 
 ---
 
 ## 👥 Autores
-Proyecto desarrollado por el **equipo de Ingeniería de Software II – Universidad El Bosque**, dentro del caso de estudio **Karen Buitrago, Andres Cuta y Miguel Sánchez**.
 
----
-📘 *“El factor clave de éxito será la coordinación y el trabajo en equipo para producir un resultado coherente y funcional.”*  
-— Caso de Estudio, Ing. Carlos Medina
+Proyecto desarrollado por el **equipo de Ingeniería de Software II – Universidad El Bosque**, dentro del caso de estudio **Karen Buitrago, Andrés Cuta y Miguel Sánchez**.
