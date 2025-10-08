@@ -1,0 +1,93 @@
+# ====================================
+# Root Git Ignore - Andina Trading
+# ====================================
+
+# 🧩 Node
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# 🔧 Environment
+.env
+.env.local
+.env.development.local
+.env.production.local
+.env.test.local
+*.env
+
+# ⚙️ Build & Dist
+dist/
+build/
+out/
+.vite/
+.cache/
+.next/
+coverage/
+
+# ⚛️ Frontend (React + Vite)
+frontend/node_modules/
+frontend/dist/
+frontend/.vite/
+frontend/.DS_Store
+
+# 🧠 Backend (Gateway + Microservicios)
+backend/**/node_modules/
+backend/**/dist/
+backend/**/.env
+backend/**/coverage/
+
+# 🗄️ Database scripts
+database/*.log
+database/*.tmp
+
+# 🧪 Test
+*.log
+*.tmp
+*.pid
+coverage/
+.nyc_output/
+jest-html-reporters-*
+
+# 🧰 IDE & Sistema
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+*.swp
+
+# 🐳 Docker
+docker-compose.override.yml
+*.pid
+*.sock
+
+# 📦 Misc
+*.zip
+*.tar.gz
+*.tgz
+
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+node_modules
+dist
+dist-ssr
+*.local
+
+# Editor directories and files
+.vscode/*
+!.vscode/extensions.json
+.idea
+.DS_Store
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
