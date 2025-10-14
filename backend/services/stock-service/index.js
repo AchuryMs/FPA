@@ -1,17 +1,14 @@
 const express = require('express');
+const cors = require('cors');
+const stockController = require('./src/controller');
+
 const app = express();
-const PORT = process.env.PORT || 3002;
-
+app.use(cors());
 app.use(express.json());
+app.use('/stock-service', stockController);
 
-// Montar rutas del servicio de stock (hexagonal: controlador como adaptador de entrada)
-try {
-    const stockController = require('./src/controller');
-    app.use('/api/stock', stockController);
-} catch (err) {
-    console.error('No se pudo cargar el controller de stock:', err.message);
-}
 
+const PORT = process.env.PORT || 3002;
 app.listen(PORT, () => {
     console.log(`Stock service listening on port ${PORT}`);
 });

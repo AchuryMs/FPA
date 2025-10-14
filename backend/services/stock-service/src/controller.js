@@ -6,16 +6,14 @@ const { StockDomain } = require('./domain');
 const yahoo = new YahooFinanceAdapter();
 const domain = new StockDomain(yahoo);
 
-// Endpoint de prueba
 router.get('/test', (req, res) => {
   res.json({ message: 'Stock service funcionando (controller).' });
 });
 
-// Endpoint: datos para la gráfica del MenuPage
-// Query: symbol (ej: AAPL), days (opcional)
+
 router.get('/menu/graph', async (req, res) => {
   try {
-    const symbol = req.query.symbol || 'APPL';
+    const symbol = req.query.symbol || 'AAPL';
     const days = parseInt(req.query.days, 10) || 30;
     const result = await domain.getMenuGraphData(symbol, days);
     res.json({ success: true, data: result });
@@ -24,8 +22,7 @@ router.get('/menu/graph', async (req, res) => {
   }
 });
 
-// Endpoint: compañías más rentables en LATAM
-// Optional: countries=BR,MX
+
 router.get('/latam/top-companies', async (req, res) => {
   try {
     const countriesQuery = req.query.countries;
@@ -36,6 +33,12 @@ router.get('/latam/top-companies', async (req, res) => {
   } catch (err) {
     res.status(500).json({ success: false, message: err.message });
   }
+});
+
+router.post('/graph', (req, res) => {
+  const { symbol, days } = req.body;
+    domain.getMenuGraphData(symbol, days);
+  res.json({ success: true, message: 'Gráfico creado exitosamente.', data: { symbol, days } });
 });
 
 module.exports = router;

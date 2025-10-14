@@ -1,4 +1,3 @@
-// Composición del servicio siguiendo arquitectura hexagonal
 const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require('cors');

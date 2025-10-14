@@ -18,9 +18,7 @@ class StockDomain {
   }
 
   // Caso de uso: obtener las compañías más rentables en LATAM
-  // Se asume una lista de símbolos representativos por país (simplificación)
   async getTopCompaniesLatam(countries = ['BR', 'MX', 'CL', 'AR', 'CO'], topN = 5) {
-    // Mapa simplificado de compañías por país (símbolos públicos y fáciles de obtener)
     const sampleSymbols = {
       BR: ['VALE', 'PETR4.SA', 'ITUB4.SA', 'BBDC4.SA'],
       MX: ['AMXL.MX', 'GFNORTEO.MX', 'BIMBOA.MX'],
