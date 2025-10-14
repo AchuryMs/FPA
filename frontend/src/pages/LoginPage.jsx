@@ -13,13 +13,13 @@ export default function LoginPage() {
     e.preventDefault();
     setError("");
     try {
-      const res = await fetch("http://localhost:3001/auth/login", {
+      const res = await fetch("http://localhost:3003/auth/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, password })
       });
       const data = await res.json();
-      if (res.ok && data.token) {
+      if (res.ok && data.token ) {
         localStorage.setItem("authToken", data.token);
         navigate("/menu");
       } else {
