@@ -12,8 +12,8 @@ const pool = mysql.createPool({
 
 class MySQLUserRepository extends UserRepository {
   async findByEmail(email) {
-    const [rows] = await pool.query('SELECT email, password_hash FROM users WHERE email = ?', [email]);
-    return rows[0];
+    const [rows] = await pool.query('SELECT email, password_hash AS password FROM users WHERE email = ?', [email]);
+    return rows[0] || null;
   }
 
   async register({ email, passwordHash }) {
@@ -34,8 +34,8 @@ class MySQLUserRepository extends UserRepository {
   async logAttempt(email, fecha, exito) {
 
     await pool.query(
-      'INSERT INTO attempt (email, fecha, exito) VALUES (?, ?, ?)',
-      [email, fecha, exito]
+      'INSERT INTO auth_login_attempt (username_submitted, success, created_at) VALUES (?, ?, ?)',
+      [email, exito, fecha]
     );
   }
 }
