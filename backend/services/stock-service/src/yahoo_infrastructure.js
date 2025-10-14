@@ -33,4 +33,5 @@ class YahooFinanceAdapter {
   }
 }
 
+
 module.exports = { YahooFinanceAdapter };

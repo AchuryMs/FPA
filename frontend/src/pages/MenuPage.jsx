@@ -26,7 +26,8 @@ export default function MenuPage() {
   const [user, setUser] = useState(null);
   const [error, setError] = useState("");
   const [prices, setPrices] = useState([]);
-  const [symbol, setSymbol] = useState('APPL');
+  const [symbol, setSymbol] = useState("AAPL");     // <- fix typo
+  const [days, setDays] = useState(90);             // <- define days
   const [loadingChart, setLoadingChart] = useState(false);
 
   useEffect(() => {
@@ -47,49 +48,41 @@ export default function MenuPage() {
   }, [navigate]);
 
   useEffect(() => {
-    // Fetch a small historical series from Yahoo Finance public chart API
+    const controller = new AbortController();
+
     async function fetchPrices() {
       setLoadingChart(true);
       try {
-        // Yahoo Finance chart endpoint
-        const url = `https://query1.finance.yahoo.com/v8/finance/chart/${symbol}?range=1mo&interval=1d&indicators=quote`;
-        const res = await fetch(url);
+        const url = `http://localhost:3002/stock-service/menu/graph?symbol=${encodeURIComponent(symbol)}&days=${days}`;
+        const res = await fetch(url, { signal: controller.signal });
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
         const json = await res.json();
-        const result = json.chart && json.chart.result && json.chart.result[0];
-        if (result && result.indicators && result.indicators.quote && result.indicators.quote[0].close) {
-          const closes = result.indicators.quote[0].close.filter(c => c !== null);
-          setPrices(closes.slice(-30));
-        } else {
-          setPrices([]);
-        }
+
+        // Esperado: { success: boolean, data: { symbol, labels: string[], data: number[] } }
+        const payload = json?.data;
+        const series = Array.isArray(payload?.data) ? payload.data : [];
+
+        setPrices(series.slice(-30)); // últimos 30 puntos
       } catch (err) {
-        console.error('Chart fetch error', err);
+        console.error("Graph fetch error", err);
         setPrices([]);
       } finally {
         setLoadingChart(false);
       }
     }
+
     fetchPrices();
-  }, [symbol]);
+    return () => controller.abort(); // <- cleanup correcto
+  }, [symbol, days]);
 
   const handleLogout = () => {
-    localStorage.removeItem('authToken');
-    navigate('/login');
+    localStorage.removeItem("authToken");
+    navigate("/login");
   };
 
-  const handleBuy = () => {
-    // Rudimentary: navigate to a buy page or open a modal later
-    navigate('/buy');
-  };
-
-  const handleSell = () => {
-    // Rudimentary: navigate to a sell page or open a modal later
-    navigate('/sell');
-  };
-
-  const handlePortfolio = () => {
-    navigate('/portfolio');
-  };
+  const handleBuy = () => navigate("/buy");
+  const handleSell = () => navigate("/sell");
+  const handlePortfolio = () => navigate("/portfolio");
 
   return (
     <div className="menu-page">
@@ -100,9 +93,7 @@ export default function MenuPage() {
         {user && (
           <div className="menu-body">
             <div className="user-block">
-              <div>
-                <p className="welcome">Bienvenido, <b>{user.email}</b></p>
-              </div>
+              <p className="welcome">Bienvenido, <b>{user.email}</b></p>
             </div>
 
             <div className="actions">
@@ -115,9 +106,24 @@ export default function MenuPage() {
             <div className="chart-block">
               <div className="chart-header">
                 <label>Símbolo: </label>
-                <input value={symbol} onChange={e => setSymbol(e.target.value.toUpperCase())} className="symbol-input" />
+                <input
+                  value={symbol}
+                  onChange={e => setSymbol(e.target.value.toUpperCase())}
+                  className="symbol-input"
+                />
+                <label style={{ marginLeft: 8 }}>Días: </label>
+                <input
+                  type="number"
+                  min={1}
+                  max={365}
+                  value={days}
+                  onChange={e => setDays(Number(e.target.value) || 90)}
+                  className="symbol-input"
+                  style={{ width: 80 }}
+                />
                 <span className="small-note">Datos: Yahoo Finance</span>
               </div>
+
               <div className="chart-area">
                 {loadingChart ? (
                   <div className="chart-loading">Cargando gráfico...</div>
@@ -126,11 +132,6 @@ export default function MenuPage() {
                 )}
               </div>
             </div>
-
-            {/* <div className="token-area">
-              <p>Tu token (solo lectura):</p>
-              <textarea value={token} readOnly className="token-textarea" />
-            </div> */}
           </div>
         )}
       </div>
