@@ -17,10 +17,10 @@ export default function DashboardPage() {
   // Estados para datos del gráfico
   const [prices, setPrices] = useState([]);
   const [symbol, setSymbol] = useState("AAPL");
-  const [days, setDays] = useState(20);
+  const [days, setDays] = useState(90);
   const [loadingChart, setLoadingChart] = useState(false);
 
-  // Estados para otros datos del dashboard (puedes agregar más endpoints)
+  // Estados para otros datos del dashboard
   const [portfolioData, setPortfolioData] = useState(null);
   const [loadingPortfolio, setLoadingPortfolio] = useState(false);
 
@@ -42,7 +42,7 @@ export default function DashboardPage() {
     }
   }, [navigate]);
 
-  // Fetch datos del gráfico (del MenuPage original)
+  // Fetch datos del gráfico
   useEffect(() => {
     if (!token) return;
 
@@ -74,40 +74,16 @@ export default function DashboardPage() {
     return () => controller.abort();
   }, [symbol, days, token]);
 
-  // Fetch datos del portafolio (opcional - agrega tu endpoint)
-  useEffect(() => {
-    if (!token) return;
-
-    async function fetchPortfolioData() {
-      setLoadingPortfolio(true);
-      try {
-        // Reemplaza con tu endpoint real
-        const res = await fetch('http://localhost:3002/api/portfolio', {
-          headers: {
-            'Authorization': `Bearer ${token}`
-          }
-        });
-        if (!res.ok) throw new Error(`HTTP ${res.status}`);
-        const data = await res.json();
-        setPortfolioData(data);
-      } catch (err) {
-        console.error("Portfolio fetch error", err);
-        setPortfolioData(null);
-      } finally {
-        setLoadingPortfolio(false);
-      }
-    }
-
-    // Descomentar cuando tengas el endpoint listo
-    // fetchPortfolioData();
-  }, [token]);
-
   const handleLogout = () => {
     localStorage.removeItem("authToken");
     navigate("/login");
   };
 
-  // Datos del gráfico procesados para AnalysisChartCard
+  const handleBuy = () => navigate("/buy");
+  const handleSell = () => navigate("/sell");
+  const handlePortfolio = () => navigate("/portfolio");
+
+  // Datos del gráfico (Toca corregir el calculo porque se ven raros)
   const chartData = prices.length > 0 ? prices.map((price, idx) => ({
     month: `Day ${idx + 1}`,
     value1: price,
@@ -115,7 +91,7 @@ export default function DashboardPage() {
     value3: price * 0.8
   })) : [];
 
-  // Datos mock mientras no tengas endpoints (puedes eliminar cuando conectes APIs reales)
+  // Datos mock
   const investmentAssets = [
     { name: 'Acciones', color: '#1f2937', percentage: 40 },
     { name: 'Bonos', color: '#6b7280', percentage: 25 },
@@ -164,6 +140,21 @@ export default function DashboardPage() {
             <div className="section-header">
               <h2 className="section-title">Invierte inteligente con Nosotros</h2>
               <p className="section-subtitle">Acciones con un balance favorable</p>
+            </div>
+
+            <div className="quick-actions">
+              <button className="action-btn action-btn-primary" onClick={handleBuy}>
+                <span className="action-icon">🛒</span>
+                <span className="action-text">Comprar Acciones</span>
+              </button>
+              <button className="action-btn action-btn-primary" onClick={handleSell}>
+                <span className="action-icon">💰</span>
+                <span className="action-text">Vender Acciones</span>
+              </button>
+              <button className="action-btn action-btn-secondary" onClick={handlePortfolio}>
+                <span className="action-icon">📊</span>
+                <span className="action-text">Ver Portafolio</span>
+              </button>
             </div>
 
             {/* Controles del gráfico */}

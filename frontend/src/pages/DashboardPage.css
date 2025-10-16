@@ -43,6 +43,62 @@
 }
 
 /* ============================================ */
+/* Quick Actions Buttons */
+/* ============================================ */
+.quick-actions {
+  display: flex;
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.action-btn {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  padding: 16px 24px;
+  border: none;
+  border-radius: 12px;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.action-btn-primary {
+  background: #0f5c4c;
+  color: #fff;
+}
+
+.action-btn-primary:hover {
+  background: #0d4d3f;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(15, 92, 76, 0.3);
+}
+
+.action-btn-secondary {
+  background: #fff;
+  color: #0f5c4c;
+  border: 2px solid #0f5c4c;
+}
+
+.action-btn-secondary:hover {
+  background: #f0fdf4;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(15, 92, 76, 0.2);
+}
+
+.action-icon {
+  font-size: 20px;
+}
+
+.action-text {
+  font-size: 15px;
+}
+
+/* ============================================ */
 /* Chart Controls */
 /* ============================================ */
 .chart-controls {
@@ -191,6 +247,14 @@
   .section-subtitle {
     font-size: 13px;
   }
+  
+  .quick-actions {
+    flex-direction: column;
+  }
+  
+  .action-btn {
+    width: 100%;
+  }
 }
 
 @media (max-width: 640px) {
@@ -200,5 +264,14 @@
   
   .dashboard-grid {
     gap: 16px;
+  }
+  
+  .chart-controls {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  
+  .data-source {
+    margin-left: 0;
   }
 }

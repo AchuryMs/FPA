@@ -5,6 +5,7 @@ import LoginPage from "./pages/LoginPage.jsx";
 import RegisterPage from "./pages/RegisterPage.jsx";
 import DashboardPage from "./pages/DashboardPage.jsx";
 import MenuPage from "./pages/MenuPage.jsx";
+import BuyPage from "./pages/BuyPage.jsx";
 
 export default function App() {
   return (
@@ -15,6 +16,7 @@ export default function App() {
         <Route path="/register" element={<RegisterPage />} />
         <Route path="/menu" element={<DashboardPage />} />
         <Route path="/menuold" element={<MenuPage />} />
+        <Route path="/buy" element={<BuyPage />} />
       </Routes>
     </BrowserRouter>
   );
