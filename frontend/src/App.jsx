@@ -3,6 +3,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import MainPage from "./pages/MainPage.jsx";
 import LoginPage from "./pages/LoginPage.jsx";
 import RegisterPage from "./pages/RegisterPage.jsx";
+import DashboardPage from "./pages/DashboardPage.jsx";
 import MenuPage from "./pages/MenuPage.jsx";
 
 export default function App() {
@@ -12,7 +13,8 @@ export default function App() {
         <Route path="/" element={<MainPage />} />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/register" element={<RegisterPage />} />
-        <Route path="/menu" element={<MenuPage />} />
+        <Route path="/menu" element={<DashboardPage />} />
+        <Route path="/menuold" element={<MenuPage />} />
       </Routes>
     </BrowserRouter>
   );
