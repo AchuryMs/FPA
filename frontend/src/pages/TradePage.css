@@ -1,0 +1,373 @@
+/* Trade Page Layout */
+.trade-container {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 24px;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+/* ============================================ */
+/* Chart Section */
+/* ============================================ */
+.chart-section {
+  background: #1e293b;
+  border-radius: 16px;
+  padding: 24px;
+  color: #fff;
+}
+
+.stock-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 32px;
+}
+
+.stock-info {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.stock-symbol {
+  font-size: 28px;
+  font-weight: 700;
+  margin: 0;
+  color: #fff;
+}
+
+.stock-price {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.price-value {
+  font-size: 32px;
+  font-weight: 700;
+  color: #fff;
+}
+
+.price-change {
+  font-size: 14px;
+  font-weight: 600;
+  padding: 6px 12px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.price-change.positive {
+  background: rgba(16, 185, 129, 0.2);
+  color: #10b981;
+}
+
+.price-change.negative {
+  background: rgba(239, 68, 68, 0.2);
+  color: #ef4444;
+}
+
+.chart-controls-top {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  align-items: flex-end;
+}
+
+.chart-type-btn {
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: #fff;
+  padding: 8px 16px;
+  border-radius: 8px;
+  font-size: 13px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.chart-type-btn.active,
+.chart-type-btn:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.time-filters {
+  display: flex;
+  gap: 8px;
+}
+
+.time-btn {
+  width: 32px;
+  height: 32px;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: #94a3b8;
+  border-radius: 8px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.time-btn.active {
+  background: rgba(59, 130, 246, 0.3);
+  border-color: #3b82f6;
+  color: #fff;
+}
+
+.time-btn:hover {
+  background: rgba(255, 255, 255, 0.2);
+  color: #fff;
+}
+
+.chart-area-trade {
+  position: relative;
+  width: 100%;
+  min-height: 350px;
+}
+
+.price-chart {
+  width: 100%;
+  height: 350px;
+}
+
+.chart-loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 350px;
+  color: #94a3b8;
+  font-size: 14px;
+}
+
+.chart-timeline {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 16px;
+  padding: 0 20px;
+  font-size: 11px;
+  color: #64748b;
+}
+
+/* ============================================ */
+/* Trade Section */
+/* ============================================ */
+.trade-section {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.balance-card {
+  background: #1e293b;
+  border-radius: 16px;
+  padding: 24px;
+  color: #fff;
+}
+
+.balance-card h3 {
+  font-size: 14px;
+  font-weight: 500;
+  color: #94a3b8;
+  margin: 0 0 12px 0;
+}
+
+.balance-amount {
+  font-size: 32px;
+  font-weight: 700;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.balance-change {
+  font-size: 14px;
+  font-weight: 600;
+  padding: 4px 8px;
+  border-radius: 6px;
+}
+
+.balance-change.positive {
+  background: rgba(16, 185, 129, 0.2);
+  color: #10b981;
+}
+
+.balance-change.negative {
+  background: rgba(239, 68, 68, 0.2);
+  color: #ef4444;
+}
+
+.exchange-card {
+  background: #fff;
+  border-radius: 16px;
+  padding: 24px;
+  border: 1px solid #e5e7eb;
+}
+
+.exchange-card h3 {
+  font-size: 16px;
+  font-weight: 600;
+  color: #1f2937;
+  margin: 0 0 8px 0;
+}
+
+.exchange-rate {
+  font-size: 13px;
+  color: #6b7280;
+  margin: 0 0 24px 0;
+}
+
+.exchange-form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.input-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.input-group label {
+  font-size: 13px;
+  color: #6b7280;
+  font-weight: 500;
+}
+
+.input-with-select {
+  display: flex;
+  align-items: center;
+  background: #f9fafb;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  padding: 4px;
+  gap: 8px;
+}
+
+.amount-input {
+  flex: 1;
+  border: none;
+  background: transparent;
+  padding: 12px 16px;
+  font-size: 16px;
+  font-weight: 600;
+  color: #1f2937;
+  outline: none;
+}
+
+.amount-input:read-only {
+  color: #6b7280;
+}
+
+.currency-select {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  background: #fff;
+  border-radius: 8px;
+  border: 1px solid #e5e7eb;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.currency-select:hover {
+  border-color: #0f5c4c;
+}
+
+.currency-icon {
+  font-size: 20px;
+}
+
+.currency-code {
+  font-size: 14px;
+  font-weight: 600;
+  color: #1f2937;
+}
+
+.exchange-icon {
+  font-size: 24px;
+  color: #6b7280;
+  text-align: center;
+  margin: 8px 0;
+}
+
+.exchange-btn {
+  width: 100%;
+  padding: 16px;
+  background: #3b82f6;
+  color: #fff;
+  border: none;
+  border-radius: 12px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.exchange-btn:hover {
+  background: #2563eb;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(59, 130, 246, 0.4);
+}
+
+.exchange-btn:active {
+  transform: translateY(0);
+}
+
+/* ============================================ */
+/* Responsive */
+/* ============================================ */
+@media (max-width: 1200px) {
+  .trade-container {
+    grid-template-columns: 1fr;
+  }
+  
+  .trade-section {
+    flex-direction: row;
+  }
+  
+  .balance-card,
+  .exchange-card {
+    flex: 1;
+  }
+}
+
+@media (max-width: 768px) {
+  .stock-header {
+    flex-direction: column;
+    gap: 20px;
+  }
+  
+  .chart-controls-top {
+    align-items: flex-start;
+    width: 100%;
+  }
+  
+  .stock-symbol {
+    font-size: 24px;
+  }
+  
+  .price-value {
+    font-size: 28px;
+  }
+  
+  .trade-section {
+    flex-direction: column;
+  }
+  
+  .balance-amount {
+    font-size: 24px;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  
+  .chart-timeline {
+    font-size: 9px;
+    padding: 0 10px;
+  }
+}
