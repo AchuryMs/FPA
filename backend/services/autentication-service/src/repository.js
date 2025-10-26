@@ -11,6 +11,10 @@ class UserRepository {
   async logAttempt(email, fecha, exito) {
     throw new Error('Método no implementado');
   }
+
+  async findRole(email) {
+    throw new Error('Método no implementado');
+  }
 }
 
 module.exports = { UserRepository };
