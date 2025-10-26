@@ -1,11 +1,8 @@
-// Adaptador: Entrada HTTP (Express)
 const express = require('express');
 const router = express.Router();
 const { AuthService } = require('./domain');
 const { MySQLUserRepository } = require('./mysql_infrastructure');
-
 const authService = new AuthService(new MySQLUserRepository());
-
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 
@@ -18,6 +15,16 @@ router.post('/login', async (req, res) => {
     res.json({ success: true, user, token });
   } catch (err) {
     res.status(401).json({ success: false, message: err.message });
+  }
+});
+
+router.get('/role', async (req, res) => {
+  const email = req.query.email;
+  try {
+    const role = await authService.findRole(email);
+    res.json({ success: true, role });
+  } catch (err) {
+    res.status(400).json({ success: false, message: err.message });
   }
 });
 

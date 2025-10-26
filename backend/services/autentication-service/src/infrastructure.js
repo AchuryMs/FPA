@@ -11,6 +11,7 @@ class InMemoryUserRepository extends UserRepository {
   async findByEmail(email) {
     return this.users.find(u => u.email === email);
   }
+  
 }
 
 module.exports = { InMemoryUserRepository };

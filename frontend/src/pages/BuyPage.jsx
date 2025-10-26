@@ -138,10 +138,6 @@ export default function BuyPage() {
       <Sidebar />
       
       <main className="dashboard-main">
-        <Header user={user} onLogout={() => {
-          localStorage.removeItem("authToken");
-          navigate("/login");
-        }} />
         
         <div className="dashboard-content">
           <div className="trade-container">

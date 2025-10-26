@@ -31,6 +31,14 @@ class AuthService {
     await this.userRepository.logAttempt(email, fecha, true);
     return { email: user.email };
   }
+
+  async findRole(email) {
+    const roleData = await this.userRepository.findRole(email);
+    if (!roleData) {
+      throw new Error('Usuario no encontrado');
+    }
+    return roleData.user_type;
+  }
 }
 
 module.exports = { User, AuthService };

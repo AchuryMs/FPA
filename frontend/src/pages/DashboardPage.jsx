@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Sidebar from "../components/Sidebar";
-import Header from "../components/Header";
 import InvestmentPerformanceCard from "../components/InvestmentPerformanceCard";
 import AnalysisChartCard from "../components/AnalysisChartCard";
 import RiskIndicatorCard from "../components/RiskIndicatorCard";
@@ -133,7 +132,6 @@ export default function DashboardPage() {
       <Sidebar />
       
       <main className="dashboard-main">
-        <Header user={user} onLogout={handleLogout} />
         
         <div className="dashboard-content">
           <div className="dashboard-section">
