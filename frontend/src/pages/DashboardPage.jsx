@@ -1,34 +1,20 @@
 import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
 import Sidebar from "../components/Sidebar";
-import InvestmentPerformanceCard from "../components/InvestmentPerformanceCard";
-import AnalysisChartCard from "../components/AnalysisChartCard";
-import RiskIndicatorCard from "../components/RiskIndicatorCard";
-import AllocationTableCard from "../components/AllocationTableCard";
 import "./DashboardPage.css";
 
 export default function DashboardPage() {
-  const navigate = useNavigate();
   const [token, setToken] = useState("");
   const [user, setUser] = useState(null);
   const [error, setError] = useState("");
-  
-  // Estados para datos del gráfico
-  const [prices, setPrices] = useState([]);
-  const [symbol, setSymbol] = useState("AAPL");
-  const [days, setDays] = useState(90);
-  const [loadingChart, setLoadingChart] = useState(false);
-
-  // Estados para otros datos del dashboard
-  const [portfolioData, setPortfolioData] = useState(null);
-  const [loadingPortfolio, setLoadingPortfolio] = useState(false);
+  const [topCompanies, setTopCompanies] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [notification, setNotification] = useState(null);
 
   // Verificar autenticación
   useEffect(() => {
     const savedToken = localStorage.getItem("authToken");
     if (!savedToken) {
       setError("No tienes sesión activa. Inicia sesión primero.");
-      setTimeout(() => navigate("/login"), 1500);
       return;
     }
     setToken(savedToken);
@@ -37,81 +23,72 @@ export default function DashboardPage() {
       setUser(payload);
     } catch {
       setError("Token inválido");
-      setTimeout(() => navigate("/login"), 1500);
     }
-  }, [navigate]);
+  }, []);
 
-  // Fetch datos del gráfico
+  // Fetch empresas LATAM
   useEffect(() => {
     if (!token) return;
 
-    const controller = new AbortController();
-
-    async function fetchPrices() {
-      setLoadingChart(true);
+    async function fetchCompanies() {
+      setLoading(true);
       try {
-        const url = `http://localhost:3002/stock-service/menu/graph?symbol=${encodeURIComponent(symbol)}&days=${days}`;
-        const res = await fetch(url, { signal: controller.signal });
-        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        const res = await fetch(
+          "http://localhost:3002/latam/top-companies?countries=CO,BR,MX,AR"
+        );
         const json = await res.json();
-
-        const payload = json?.data;
-        const series = Array.isArray(payload?.data) ? payload.data : [];
-
-        setPrices(series);
-      } catch (err) {
-        if (err.name !== 'AbortError') {
-          console.error("Graph fetch error", err);
-          setPrices([]);
+        if (json.success) {
+          setTopCompanies(json.data);
+        } else {
+          setTopCompanies([]);
         }
+      } catch (err) {
+        console.error("Error fetching companies:", err);
       } finally {
-        setLoadingChart(false);
+        setLoading(false);
       }
     }
 
-    fetchPrices();
-    return () => controller.abort();
-  }, [symbol, days, token]);
+    fetchCompanies();
+  }, [token]);
 
-  const handleLogout = () => {
-    localStorage.removeItem("authToken");
-    navigate("/login");
+  // Función para mostrar notificación temporal
+  const showNotification = (message, type = "success") => {
+    setNotification({ message, type });
+    setTimeout(() => setNotification(null), 3000);
   };
 
-  const handleBuy = () => navigate("/buy");
-  const handleSell = () => navigate("/sell");
-  const handlePortfolio = () => navigate("/portfolio");
+  // Función para enviar compra
+  const handleBuy = async (ticker, qty, type) => {
+    try {
+      const res = await fetch("http://localhost:3002/order", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          investor: user?.id || "INV001",
+          broker: "BROKER01",
+          ticker,
+          side: "buy",
+          qty: parseInt(qty, 10),
+          type,
+        }),
+      });
 
-  // Datos del gráfico (Toca corregir el calculo porque se ven raros)
-  const chartData = prices.length > 0 ? prices.map((price, idx) => ({
-    month: `Day ${idx + 1}`,
-    value1: price,
-    value2: price * 0.9,
-    value3: price * 0.8
-  })) : [];
+      const data = await res.json();
+      if (data.success) {
+        showNotification(`✅ Compra de ${qty} ${ticker} realizada con éxito`);
+      } else {
+        showNotification(`❌ Error: ${data.message}`, "error");
+      }
+    } catch (err) {
+      console.error("Error al enviar orden:", err);
+      showNotification("⚠️ Error al conectar con el servidor", "error");
+    }
+  };
 
-  // Datos mock
-  const investmentAssets = [
-    { name: 'Acciones', color: '#1f2937', percentage: 40 },
-    { name: 'Bonos', color: '#6b7280', percentage: 25 },
-    { name: 'ETFs', color: '#9ca3af', percentage: 15 }
-  ];
-
-  const assetAllocation = portfolioData?.allocation || [
-    { name: 'Stocks & ETFs', percentage: '43', amount: 67500 },
-    { name: 'Bonds', percentage: '22', amount: 37500 },
-    { name: 'Commodities', percentage: '10', amount: 15000 },
-    { name: 'Cash & Others', percentage: '3', amount: 7500 }
-  ];
-
-  const salesTable = portfolioData?.sales || [
-    { name: 'Tech Growth Fund', percentage: 'BUY', amount: 125000 },
-    { name: 'Tesla Inc. Stocks', percentage: 'BUY', amount: 87500 },
-    { name: 'Bitcoin (BTC)', percentage: 'BUY', amount: 99500 },
-    { name: 'Gold ETF', percentage: 'BUY', amount: 32490 }
-  ];
-
-  if (error && !user) {
+  if (error) {
     return (
       <div className="error-page">
         <div className="error-message">{error}</div>
@@ -130,88 +107,156 @@ export default function DashboardPage() {
   return (
     <div className="dashboard-layout">
       <Sidebar />
-      
       <main className="dashboard-main">
-        
         <div className="dashboard-content">
-          <div className="dashboard-section">
-            <div className="section-header">
-              <h2 className="section-title">Invierte inteligente con Nosotros</h2>
-              <p className="section-subtitle">Acciones con un balance favorable</p>
+          <div className="section-header">
+            <h2 className="section-title">Mercado LATAM</h2>
+            <p className="section-subtitle">
+              Acciones más rentables por país — fuente: Yahoo Finance
+            </p>
+          </div>
+
+          {loading && <div className="spinner">Cargando...</div>}
+
+          {/* Notificación flotante */}
+          {notification && (
+            <div className={`notification ${notification.type}`}>
+              {notification.message}
             </div>
+          )}
 
-            <div className="quick-actions">
-              <button className="action-btn action-btn-primary" onClick={handleBuy}>
-                <span className="action-icon">🛒</span>
-                <span className="action-text">Comprar Acciones</span>
-              </button>
-              <button className="action-btn action-btn-primary" onClick={handleSell}>
-                <span className="action-icon">💰</span>
-                <span className="action-text">Vender Acciones</span>
-              </button>
-              <button className="action-btn action-btn-secondary" onClick={handlePortfolio}>
-                <span className="action-icon">📊</span>
-                <span className="action-text">Ver Portafolio</span>
-              </button>
+          {!loading && (
+            <div className="country-section">
+              {topCompanies.map((country) => (
+                <div key={country.country} className="country-block">
+                  <h3 className="country-title">
+                    🇨🇴 País: {country.country}
+                  </h3>
+                  <div className="company-grid">
+                    {country.companies.map((company) => (
+                      <CompanyCard
+                        key={company.symbol}
+                        company={company}
+                        onBuy={handleBuy}
+                      />
+                    ))}
+                  </div>
+                </div>
+              ))}
             </div>
+          )}
 
-            {/* Controles del gráfico */}
-            <div className="chart-controls">
-              <label>
-                Símbolo: 
-                <input
-                  value={symbol}
-                  onChange={e => setSymbol(e.target.value.toUpperCase())}
-                  className="symbol-input"
-                  placeholder="AAPL"
-                />
-              </label>
-              <label>
-                Días: 
-                <input
-                  type="number"
-                  min={1}
-                  max={365}
-                  value={days}
-                  onChange={e => setDays(Number(e.target.value) || 90)}
-                  className="days-input"
-                />
-              </label>
-              <span className="data-source">Datos: Yahoo Finance</span>
-            </div>
-
-            <div className="dashboard-grid">
-              <InvestmentPerformanceCard 
-                totalValue={8750}
-                percentage={12.5}
-                assets={investmentAssets}
-              />
-
-              <AnalysisChartCard data={chartData} />
-
-              <RiskIndicatorCard />
-
-              <AllocationTableCard 
-                title="Asset Allocation"
-                data={assetAllocation}
-                accentColor="#0f5c4c"
-              />
-
-              <AllocationTableCard 
-                title="Investment Sales Table"
-                data={salesTable}
-                accentColor="#1e3a5f"
-              />
-            </div>
-
-            {loadingChart && (
-              <div className="loading-overlay">
-                <div className="spinner"></div>
-              </div>
-            )}
+          <div className="orders-section">
+            <h3>Tus órdenes recientes</h3>
+            <OrdersTable investorId={user?.id || "INV001"} />
           </div>
         </div>
       </main>
     </div>
+  );
+}
+
+// --- Componente de tarjeta ---
+function CompanyCard({ company, onBuy }) {
+  const [showForm, setShowForm] = useState(false);
+  const [qty, setQty] = useState(1);
+  const [type, setType] = useState("market");
+
+  const toggleForm = () => setShowForm(!showForm);
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    await onBuy(company.symbol, qty, type);
+    setShowForm(false);
+  };
+
+  return (
+    <div className="company-card">
+      <div className="card-header" onClick={toggleForm}>
+        <h4>{company.name}</h4>
+        <p className="symbol">{company.symbol}</p>
+        <p className="price">${company.price?.toFixed(2) || "—"}</p>
+        <p className={`change ${company.change >= 0 ? "positive" : "negative"}`}>
+          {company.change >= 0 ? "▲" : "▼"} {company.change?.toFixed(2)}%
+        </p>
+      </div>
+
+      {showForm && (
+        <form className="buy-form" onSubmit={handleSubmit}>
+          <label>
+            Cantidad:
+            <input
+              type="number"
+              min="1"
+              value={qty}
+              onChange={(e) => setQty(e.target.value)}
+            />
+          </label>
+
+          <label>
+            Tipo de orden:
+            <select value={type} onChange={(e) => setType(e.target.value)}>
+              <option value="market">Market</option>
+              <option value="limit">Limit</option>
+            </select>
+          </label>
+
+          <button type="submit" className="buy-button">
+            Comprar
+          </button>
+        </form>
+      )}
+    </div>
+  );
+}
+
+
+function OrdersTable({ investorId }) {
+  const [orders, setOrders] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    async function fetchOrders() {
+      try {
+        const res = await fetch(`http://localhost:3002/orders/${investorId}`);
+        const json = await res.json();
+        if (json.success) setOrders(json.data);
+      } catch (err) {
+        console.error("Error fetching orders:", err);
+      } finally {
+        setLoading(false);
+      }
+    }
+    fetchOrders();
+  }, [investorId]);
+
+  if (loading) return <p>Cargando órdenes...</p>;
+  if (orders.length === 0) return <p>No tienes órdenes registradas.</p>;
+
+  return (
+    <table className="orders-table">
+      <thead>
+        <tr>
+          <th>Fecha</th>
+          <th>Ticker</th>
+          <th>Cantidad</th>
+          <th>Tipo</th>
+          <th>Operación</th>
+        </tr>
+      </thead>
+      <tbody>
+        {orders.map((o) => (
+          <tr key={o.id}>
+            <td>{new Date(o.order_date).toLocaleString()}</td>
+            <td>{o.ticker}</td>
+            <td>{o.qty}</td>
+            <td>{o.type}</td>
+            <td className={o.side === "buy" ? "positive" : "negative"}>
+              {o.side.toUpperCase()}
+            </td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
   );
 }

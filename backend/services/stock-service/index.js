@@ -5,6 +5,7 @@ const stockController = require('./src/controller');
 const app = express();
 app.use(cors());
 app.use(express.json());
+app.use('/', stockController);
 app.use('/stock-service', stockController);
 
 

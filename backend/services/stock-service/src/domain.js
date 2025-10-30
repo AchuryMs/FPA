@@ -84,6 +84,12 @@ async getTopCompaniesLatam(countries = ['BR', 'MX', 'CL', 'AR', 'CO'], topN = 5)
 async placeOrder(investor, broker,ticker, side, qty, type) {
     return this.repository.addOrder(investor, broker,ticker, side, qty, type, new Date());
   }
+
+
+  async getOrdersByInvestor(investorId) {
+  return this.repository.getOrdersByInvestor(investorId);
+}
+
 }
 
 module.exports = { StockDomain };
