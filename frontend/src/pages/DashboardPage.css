@@ -275,3 +275,135 @@
     margin-left: 0;
   }
 }
+
+
+.companies-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 1rem;
+}
+
+.company-card {
+  background: #1e293b;
+  border-radius: 12px;
+  padding: 1rem;
+  color: white;
+  cursor: pointer;
+  transition: transform 0.2s ease, background 0.3s ease;
+}
+
+.company-card:hover {
+  transform: translateY(-2px);
+  background: #334155;
+}
+
+.company-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.company-header h3 {
+  margin: 0;
+  font-size: 1.1rem;
+}
+
+.symbol {
+  font-size: 0.85rem;
+  color: #9ca3af;
+}
+
+.price-section {
+  text-align: right;
+}
+
+.price {
+  display: block;
+  font-weight: bold;
+  font-size: 1.1rem;
+}
+
+.change.green {
+  color: #10b981;
+}
+.change.red {
+  color: #ef4444;
+}
+
+.buy-form {
+  margin-top: 0.8rem;
+  padding-top: 0.8rem;
+  border-top: 1px solid #475569;
+}
+
+.buy-form label {
+  display: block;
+  margin-bottom: 0.5rem;
+}
+
+.buy-form input {
+  width: 100%;
+  padding: 0.4rem;
+  border-radius: 6px;
+  border: none;
+  outline: none;
+  margin-bottom: 0.8rem;
+}
+
+.buy-form button {
+  width: 100%;
+  padding: 0.5rem;
+  border: none;
+  border-radius: 8px;
+  background: #3b82f6;
+  color: white;
+  font-weight: 600;
+  cursor: pointer;
+}
+.buy-form button:hover {
+  background: #2563eb;
+}
+
+
+.notification {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  background: #10b981;
+  color: white;
+  padding: 12px 20px;
+  border-radius: 8px;
+  font-weight: 500;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+  z-index: 1000;
+}
+.notification.error { background: #ef4444; }
+.company-card { background: #f8fafc; border-radius: 10px; padding: 12px; margin: 10px; cursor: pointer; }
+.buy-form { margin-top: 10px; display: flex; flex-direction: column; gap: 6px; }
+.buy-button { background: #0f766e; color: white; padding: 6px 10px; border-radius: 6px; border: none; }
+.positive { color: #10b981; }
+.negative { color: #ef4444; }
+
+
+.orders-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 15px;
+  background: #f8fafc;
+  border-radius: 8px;
+  overflow: hidden;
+}
+.orders-table th, .orders-table td {
+  padding: 10px;
+  text-align: left;
+  border-bottom: 1px solid #e5e7eb;
+}
+.orders-table th {
+  background-color: #1e293b;
+  color: white;
+}
+.orders-table tr:hover {
+  background-color: #e2e8f0;
+}
+.orders-table .positive { color: #10b981; font-weight: 600; }
+.orders-table .negative { color: #ef4444; font-weight: 600; }

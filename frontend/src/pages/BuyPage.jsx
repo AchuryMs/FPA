@@ -11,7 +11,7 @@ export default function BuyPage() {
   const [error, setError] = useState("");
   
   // Estados para el trading
-  const [symbol, setSymbol] = useState("BTC");
+  const [symbol, setSymbol] = useState("AAPL");
   const [currentPrice, setCurrentPrice] = useState(0);
   const [priceChange, setPriceChange] = useState(0);
   const [priceChangePercent, setPriceChangePercent] = useState(0);
@@ -87,35 +87,45 @@ export default function BuyPage() {
     setYouGet(calculated);
   }, [youSell, exchangeRate]);
 
-  const handleExchange = async () => {
-    if (!youSell || parseFloat(youSell) <= 0) {
-      alert("Por favor ingresa una cantidad válida");
-      return;
+ const handleExchange = async () => {
+  if (!youSell || parseFloat(youSell) <= 0) {
+    alert("Por favor ingresa una cantidad válida");
+    return;
+  }
+
+  try {
+    const orderData = {
+      investor: user?.id || user?.email || "INV001", // ajusta según payload de tu token
+      broker: "BROKER001", // puedes cambiarlo si tienes un broker real
+      ticker: symbol,      // símbolo actual mostrado en pantalla
+      side: "buy",         // compra
+      qty: parseFloat(youSell),
+      type: "market"
+    };
+
+    const res = await fetch("http://localhost:3002/order", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify(orderData)
+    });
+
+    const data = await res.json();
+
+    if (data.success) {
+      alert(`✅ ${data.message}\nHas comprado ${youSell} ${symbol} por $${youGet}`);
+      navigate("/menu");
+    } else {
+      alert(`❌ Error: ${data.message}`);
     }
 
-    try {
-      // TODO: Implementar llamada al API de compra
-      // const res = await fetch('http://localhost:3002/api/trade/buy', {
-      //   method: 'POST',
-      //   headers: {
-      //     'Content-Type': 'application/json',
-      //     'Authorization': `Bearer ${token}`
-      //   },
-      //   body: JSON.stringify({
-      //     symbol: symbol,
-      //     amount: parseFloat(youSell),
-      //     price: currentPrice
-      //   })
-      // });
-      // const data = await res.json();
-      
-      alert(`Compra exitosa: ${youSell} ${symbol} por $${youGet}`);
-      navigate("/menu");
-    } catch (err) {
-      console.error("Error en la compra:", err);
-      alert("Error al realizar la compra");
-    }
-  };
+  } catch (err) {
+    console.error("Error en la compra:", err);
+    alert("⚠️ Error al realizar la compra. Intenta nuevamente.");
+  }
+};
+
 
   if (error && !user) {
     return (

@@ -18,6 +18,16 @@ class MySQLOrdersRepository extends OrdersRepository {
     return rows[0] || null;
   }
 
+
+    async getOrdersByInvestor(investorId) {
+    const [rows] = await pool.query(
+      'SELECT * FROM orders WHERE investor_id = ? ORDER BY order_date DESC',
+      [investorId]
+    );
+    return rows;
+  }
+
+
   async findRole(email) {
     const [rows] = await pool.query('SELECT user_type FROM users WHERE email = ?', [email]);
     return rows[0] || null;

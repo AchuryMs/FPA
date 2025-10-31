@@ -68,6 +68,17 @@ router.post('/order', async (req, res) => {
   }
 });
 
+router.get('/orders/:investorId', async (req, res) => {
+  try {
+    const { investorId } = req.params;
+    const orders = await domain.getOrdersByInvestor(investorId);
+    res.json({ success: true, data: orders });
+  } catch (err) {
+    console.error("Error en /orders/:investorId:", err);
+    res.status(500).json({ success: false, message: err.message });
+  }
+});
+
 
 
 module.exports = router;
