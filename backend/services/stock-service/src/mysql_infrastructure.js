@@ -33,6 +33,10 @@ class MySQLOrdersRepository extends OrdersRepository {
     return rows[0] || null;
   }
 
+  async validateContract(email, password) {
+    const [rows] = await pool.query('SELECT * FROM users WHERE email = ? AND password = ?', [email, password]);
+    return rows[0] || null;
+  } 
 
 
 }

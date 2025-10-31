@@ -32,34 +32,8 @@ CREATE TABLE IF NOT EXISTS users (
   CONSTRAINT ck_users_email_format CHECK (email LIKE '%_@_%._%')
 ) ENGINE=InnoDB;
 
-CREATE TABLE investors (
-  id        CHAR(36)  NOT NULL DEFAULT (UUID()),
-  user_id   CHAR(36)  NOT NULL,
-  name      VARCHAR(120) NOT NULL,
-  email     VARCHAR(180) NULL,
-  created_at DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
-  PRIMARY KEY (id),
-  CONSTRAINT fk_investors_user FOREIGN KEY (user_id) REFERENCES users(id),
-  -- Índices/únicos por inquilino
-  UNIQUE KEY uq_investor_email_per_user (user_id, email),
-  UNIQUE KEY uq_investor_id_per_user    (user_id, id),      -- para FKs compuestas
-  INDEX idx_investors_user              (user_id)
-) ENGINE=InnoDB;
-
--- Brokers (por usuario)
-CREATE TABLE brokers (
-  id        CHAR(36)  NOT NULL DEFAULT (UUID()),
-  user_id   CHAR(36)  NOT NULL,
-  name      VARCHAR(120) NOT NULL,
-  created_at DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
-  PRIMARY KEY (id),
-  CONSTRAINT fk_brokers_user FOREIGN KEY (user_id) REFERENCES users(id),
-  UNIQUE KEY uq_broker_name_per_user (user_id, name),
-  UNIQUE KEY uq_broker_id_per_user   (user_id, id),         -- para FKs compuestas
-  INDEX idx_brokers_user             (user_id)
-) ENGINE=InnoDB;
-
 /**select * from users;
+select * from investors;
 select * from auth_login_attempt;
 truncate table  auth_login_attempt;
 delete from users where email in( 'Andres@cuta.com','usuario@ejemplo.com');**/
@@ -80,33 +54,24 @@ CREATE TABLE IF NOT EXISTS auth_login_attempt (
 CREATE INDEX ix_attempt_user     ON auth_login_attempt (user_id);
 CREATE INDEX ix_attempt_created  ON auth_login_attempt (created_at);
 
-DELIMITER $$
+CREATE TABLE IF NOT EXISTS Contracts (
 
-CREATE TRIGGER trg_after_user_insert_investor
-AFTER INSERT ON users
-FOR EACH ROW
-BEGIN
-  IF NEW.user_type = 'investor' THEN
-    INSERT INTO investors (id, user_id, name, email)
-    VALUES (UUID(), NEW.id, NEW.full_name, NEW.email);
-  END IF;
-END$$
+  id          CHAR(36)  NOT NULL DEFAULT (UUID()),
+  investor_id CHAR(36)  NOT NULL,
+  broker_id   CHAR(36)  NOT NULL,
+  status       ENUM('active','suspended','terminated') NOT NULL DEFAULT 'active',
+  signed_at    DATETIME(3) NOT NULL,
+  effective_from DATE     NOT NULL,
+  effective_to   DATE     NULL,
+  terminated_at  DATETIME(3) NULL,
+  
+  created_at  DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
+  updated_at  DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3) ON UPDATE CURRENT_TIMESTAMP(3),
 
-DELIMITER ;
+  PRIMARY KEY (id)
 
-DELIMITER $$
+) ENGINE=InnoDB;
 
-CREATE TRIGGER trg_after_user_insert_broker
-AFTER INSERT ON users
-FOR EACH ROW
-BEGIN
-  IF NEW.user_type = 'broker' THEN
-    INSERT INTO brokers (id, user_id, name)
-    VALUES (UUID(), NEW.id, NEW.full_name);
-  END IF;
-END$$
-
-DELIMITER ;
 
 
 
@@ -132,8 +97,3 @@ DELIMITER ;
 --   3) Si OK: UPDATE users SET last_login_at=NOW(3) WHERE id=?
 --   4) Inserta en auth_login_attempt (success=1 / 0 según corresponda)
 --   5) Genera y firma el JWT de acceso en tu servicio (HS256/RS256/ECDSA)
-
--- Refresh (si usas tabla refresh_tokens):
---   - Para emitir: genera refresh aleatorio (32 bytes), guarda SHA-256(refresh) en token_hash.
---   - Para validar: busca por token_hash = SHA-256(refreshEntrante), verifica expiración y revocado.
---   - Para revocar: UPDATE refresh_tokens SET revoked_at=NOW(3) WHERE token_hash=...;
