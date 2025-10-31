@@ -22,6 +22,13 @@ class MySQLOrdersRepository extends OrdersRepository {
     const [rows] = await pool.query('SELECT user_type FROM users WHERE email = ?', [email]);
     return rows[0] || null;
   }
+
+  async validateContract(email, password) {
+    const [rows] = await pool.query('SELECT * FROM users WHERE email = ? AND password = ?', [email, password]);
+    return rows[0] || null;
+  } 
+
+
 }
 
 module.exports = { MySQLOrdersRepository };

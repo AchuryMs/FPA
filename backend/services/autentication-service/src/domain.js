@@ -26,8 +26,7 @@ class AuthService {
       await this.userRepository.logAttempt(email, fecha, false);
       throw new Error('Credenciales inválidas');
     }
-
-    // Registrar intento exitoso
+    
     await this.userRepository.logAttempt(email, fecha, true);
     return { email: user.email };
   }
