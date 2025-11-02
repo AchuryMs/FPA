@@ -1,10 +1,3 @@
-// Dominio: Entidad y lógica de usuario
-class User {
-  constructor(email, password) {
-    this.email = email;
-    this.password = password;
-  }
-}
 
 const bcrypt = require('bcryptjs');
 
@@ -15,6 +8,7 @@ class AuthService {
 
   async login(email, password) {
     const user = await this.userRepository.findByEmail(email);
+
     const fecha = new Date();
     if (!user) {
       await this.userRepository.logAttempt(email, fecha, false);
@@ -28,11 +22,11 @@ class AuthService {
     }
     
     await this.userRepository.logAttempt(email, fecha, true);
-    return { email: user.email };
+    return { id: user.id };
   }
 
-  async findRole(email) {
-    const roleData = await this.userRepository.findRole(email);
+  async findRole(id) {
+    const roleData = await this.userRepository.findRole(id);
     if (!roleData) {
       throw new Error('Usuario no encontrado');
     }
@@ -40,4 +34,4 @@ class AuthService {
   }
 }
 
-module.exports = { User, AuthService };
+module.exports = { AuthService };

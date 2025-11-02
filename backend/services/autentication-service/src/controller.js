@@ -11,7 +11,7 @@ router.post('/login', async (req, res) => {
   try {
     const user = await authService.login(email, password);
     // Generar token JWT
-    const token = jwt.sign({ email: user.email }, process.env.JWT_SECRET || 'clave_secreta', { expiresIn: '2h' });
+    const token = jwt.sign({ id: user.id }, process.env.JWT_SECRET || 'clave_secreta', { expiresIn: '2h' });
     res.json({ success: true, user, token });
   } catch (err) {
     res.status(401).json({ success: false, message: err.message });
@@ -19,9 +19,9 @@ router.post('/login', async (req, res) => {
 });
 
 router.get('/role', async (req, res) => {
-  const email = req.query.email;
+  const id = req.query.id;
   try {
-    const role = await authService.findRole(email);
+    const role = await authService.findRole(id);
     res.json({ success: true, role });
   } catch (err) {
     res.status(400).json({ success: false, message: err.message });

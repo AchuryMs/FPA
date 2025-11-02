@@ -86,4 +86,6 @@ async placeOrder(investor, broker,ticker, side, qty, type) {
 
 }
 
+}
+
 module.exports = { StockDomain };
