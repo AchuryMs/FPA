@@ -13,7 +13,7 @@ const pool = mysql.createPool({
 class MySQLUserRepository extends UserRepository {
   
   async findByEmail(email) {
-    const [rows] = await pool.query('SELECT email, password_hash AS password FROM users WHERE email = ?', [email]);
+    const [rows] = await pool.query('SELECT id , email, password_hash AS password FROM users WHERE email = ?', [email]);
     return rows[0] || null;
   }
 
