@@ -6,12 +6,20 @@ const pool = mysql.createPool({
   host: 'localhost',
   port: 3306,
   user: 'root',
-  password: '12345678',
+  password: 'root',
   database: 'andina_auth'
 });
 
 class MySQLUserRepository extends UserRepository {
-  
+
+  async findById(id) {
+    const [rows] = await pool.query(
+      'SELECT id, email, full_name, user_type, status, created_at, updated_at FROM users WHERE id = ?',
+      [id]
+    );
+    return rows[0] || null;
+  }
+
   async findByEmail(email) {
     const [rows] = await pool.query('SELECT id , email, password_hash AS password FROM users WHERE email = ?', [email]);
     return rows[0] || null;
@@ -28,8 +36,8 @@ class MySQLUserRepository extends UserRepository {
     }
     const fecha_registro = new Date();
     fecha_registro.setDate(fecha_registro.getDate());
-    
-    
+
+
     const [result] = await pool.query(
       'INSERT INTO users (email, password_hash, created_at, updated_at) VALUES (?, ?, ?, ?)',
       [email, passwordHash, fecha_registro, fecha_registro]

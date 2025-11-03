@@ -78,13 +78,13 @@ export default function DashboardPage() {
 
       const data = await res.json();
       if (data.success) {
-        showNotification(`✅ Compra de ${qty} ${ticker} realizada con éxito`);
+        showNotification(`Compra de ${qty} ${ticker} realizada con éxito`);
       } else {
-        showNotification(`❌ Error: ${data.message}`, "error");
+        showNotification(`Error: ${data.message}`, "error");
       }
     } catch (err) {
       console.error("Error al enviar orden:", err);
-      showNotification("⚠️ Error al conectar con el servidor", "error");
+      showNotification("Error al conectar con el servidor", "error");
     }
   };
 
