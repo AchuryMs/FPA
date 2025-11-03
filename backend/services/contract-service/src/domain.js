@@ -3,49 +3,35 @@ class ContractService {
     this.repository = repository;
   }
 
-  // === 1. Obtener contratos ===
-  async getContracts(investorId = null) {
-    if (investorId) {
-      return this.repository.getContractsByInvestor(investorId);
-    }
-    return this.repository.getAllContracts();
+  async getContracts(investorId) {
+    console.log(`[ContractService] Listando contratos para ${investorId}`);
+    return await this.repository.getContracts(investorId);
   }
 
-  // === 2. Crear contrato ===
   async createContract(investorId, brokerId, status, effectiveFrom, effectiveTo) {
-    if (!investorId || !brokerId) {
-      throw new Error("Los campos investorId y brokerId son obligatorios.");
-    }
-
-    const signedAt = new Date();
-    const contract = {
+    console.log(`[ContractService] Creando contrato ${investorId} ↔ ${brokerId}`);
+    return await this.repository.createContract(
       investorId,
       brokerId,
-      status: status || "active",
-      signedAt,
+      status,
       effectiveFrom,
-      effectiveTo,
-    };
-
-    return this.repository.addContract(contract);
+      effectiveTo
+    );
   }
 
-  // === 3. Validar contrato activo ===
-  async validateContract(investorId) {
-    if (!investorId) throw new Error("Falta el ID del inversionista.");
-    return this.repository.validateContract(investorId);
+  async updateContract(id, data) {
+    console.log(`[ContractService] Actualizando contrato ${id}`);
+    return await this.repository.updateContract(id, data);
   }
 
-  // === 4. Actualizar contrato ===
-  async updateContract(id, fields) {
-    if (!id) throw new Error("Debe especificar el ID del contrato.");
-    return this.repository.updateContract(id, fields);
-  }
-
-  // === 5. Eliminar contrato ===
   async deleteContract(id) {
-    if (!id) throw new Error("Debe especificar el ID del contrato.");
-    return this.repository.deleteContract(id);
+    console.log(`[ContractService] Eliminando contrato ${id}`);
+    return await this.repository.deleteContract(id);
+  }
+
+  async validateContract(investor, broker) {
+    console.log(`[ContractService] Validando contrato entre ${investor} ↔ ${broker}`);
+    return await this.repository.validateContract(investor, broker);
   }
 }
 

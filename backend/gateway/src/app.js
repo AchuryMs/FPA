@@ -79,6 +79,87 @@ app.use(
   })
 );
 
+
+// ====== Proxy: CONTRACT SERVICE ======
+app.use(
+  "/api/brokers",
+  createProxyMiddleware({
+    target: (process.env.BROKER_SERVICE_URL || "http://localhost:3006") + "/broker-service",
+    changeOrigin: true,
+    logLevel: "info",
+    onProxyReq: (proxyReq, req) => {
+      console.log(`[Proxy][BROKER] -> ${req.method} ${req.originalUrl}`);
+    },
+    onProxyRes: (proxyRes, req) => {
+      console.log(`[Proxy][BROKER] <- ${proxyRes.statusCode} ${req.method} ${req.originalUrl}`);
+    },
+    onError: (err, req, res) => {
+      console.error(`[Proxy][BROKER][ERROR] ${err.message}`);
+      if (!res.headersSent) res.status(502).send("Gateway Proxy Error (BROKER)");
+    },
+  })
+);
+
+// ====== Proxy: CPORTFOLIO SERVICE ======
+app.use(
+  "/api/portfolio",
+  createProxyMiddleware({
+    target: (process.env.PORTFOLIO_SERVICE_URL || "http://localhost:3007") + "/portfolio-service",
+    changeOrigin: true,
+    logLevel: "info",
+    onProxyReq: (proxyReq, req) => {
+      console.log(`[Proxy][PORTFOLIO] -> ${req.method} ${req.originalUrl}`);
+    },
+    onProxyRes: (proxyRes, req) => {
+      console.log(`[Proxy][PORTFOLIO] <- ${proxyRes.statusCode} ${req.method} ${req.originalUrl}`);
+    },
+    onError: (err, req, res) => {
+      console.error(`[Proxy][PORTFOLIO][ERROR] ${err.message}`);
+      if (!res.headersSent) res.status(502).send("Gateway Proxy Error (PORTFOLIO)");
+    },
+  })
+);
+
+// ====== Proxy: PAYMENT SERVICE ======
+app.use(
+  "/api/payments",
+  createProxyMiddleware({
+    target: (process.env.PAYMENT_SERVICE_URL || "http://localhost:3008") + "/payment-service",
+    changeOrigin: true,
+    logLevel: "info",
+    onProxyReq: (proxyReq, req) => {
+      console.log(`[Proxy][PAYMENT] -> ${req.method} ${req.originalUrl}`);
+    },
+    onProxyRes: (proxyRes, req) => {
+      console.log(`[Proxy][PAYMENT] <- ${proxyRes.statusCode} ${req.method} ${req.originalUrl}`);
+    },
+    onError: (err, req, res) => {
+      console.error(`[Proxy][PAYMENT][ERROR] ${err.message}`);
+      if (!res.headersSent) res.status(502).send("Gateway Proxy Error (PAYMENT)");
+    },
+  })
+);
+
+// ====== Proxy: REPORT SERVICE ======
+app.use(
+  "/api/reports",
+  createProxyMiddleware({
+    target: (process.env.REPORT_SERVICE_URL || "http://localhost:3010") + "/report-service",
+    changeOrigin: true,
+    logLevel: "info",
+    onProxyReq: (proxyReq, req) => {
+      console.log(`[Proxy][REPORT] -> ${req.method} ${req.originalUrl}`);
+    },
+    onProxyRes: (proxyRes, req) => {
+      console.log(`[Proxy][REPORT] <- ${proxyRes.statusCode} ${req.method} ${req.originalUrl}`);
+    },
+    onError: (err, req, res) => {
+      console.error(`[Proxy][REPORT][ERROR] ${err.message}`);
+      if (!res.headersSent) res.status(502).send("Gateway Proxy Error (REPORT)");
+    },
+  })
+);
+
 // ====== Ruta de prueba ======
 app.get("/health", (_req, res) => {
   res.json({ ok: true, service: "Gateway running" });

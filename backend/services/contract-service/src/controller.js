@@ -41,11 +41,25 @@ router.post("/contracts", async (req, res) => {
 // ----- Validar contrato activo -----
 router.get("/validate", async (req, res) => {
   try {
-    const { investor } = req.query;
-    const valid = await service.validateContract(investor);
-    res.json({ success: true, active: valid });
+    const { investor, broker } = req.query;
+    if (!investor || !broker) {
+      return res
+        .status(400)
+        .json({ success: false, message: "Faltan parámetros investor o broker" });
+    }
+
+    const contract = await service.validateContract(investor, broker);
+
+    if (!contract) {
+      console.log("[ContractService] ❌ No se encontró contrato activo");
+      return res.json({ contract: null });
+    }
+
+    console.log("[ContractService] ✅ Contrato activo encontrado");
+    res.json({ contract });
   } catch (err) {
-    res.status(500).json({ success: false, message: err.message });
+    console.error("Error validando contrato:", err);
+    res.status(500).json({ error: "Internal server error" });
   }
 });
 

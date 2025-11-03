@@ -1,0 +1,3 @@
+.env
+
+services/payment-service/.env
