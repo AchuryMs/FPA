@@ -1,0 +1,16 @@
+{
+  "name": "fpa-backend",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Backend monorepo - Andina Trading",
+  "scripts": {
+    "dev:gateway": "cd gateway && npm run dev",
+    "dev:auth": "cd services/autentication-service && npm run dev",
+    "dev:contract": "cd services/contract-service && npm run dev",
+    "dev:stock": "cd services/stock-service && npm run dev",
+    "dev:broker": "cd services/broker-service && npm run dev",
+    "dev:all": "npm run dev:gateway & npm run dev:auth & npm run dev:contract & npm run dev:stock & npm run dev:broker"
+  },
+  "dependencies": {},
+  "devDependencies": {}
+}

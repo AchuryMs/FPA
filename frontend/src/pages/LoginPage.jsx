@@ -2,6 +2,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "./LoginPage.css";
+import { apiFetch } from "../services/api.js";
 
 export default function LoginPage() {
   const navigate = useNavigate();
@@ -13,19 +14,24 @@ export default function LoginPage() {
     e.preventDefault();
     setError("");
     try {
-      const res = await fetch("http://localhost:3003/auth/login", {
+      const { ok, data } = await apiFetch("/auth/login", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, password })
       });
-      const data = await res.json();
-      if (res.ok && data.token ) {
+
+      if (ok && data.token) {
         localStorage.setItem("authToken", data.token);
+        // Obtener datos del usuario
+        const { data: me } = await apiFetch("/auth/me");
+        if (me?.user?.user_type) {
+          localStorage.setItem("userRole", me.user.user_type);
+        }
         navigate("/menu");
       } else {
         setError(data.message || "Credenciales incorrectas");
       }
     } catch (err) {
+      console.error(err);
       setError("Error de conexión");
     }
   };

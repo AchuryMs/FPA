@@ -6,6 +6,14 @@ class AuthService {
     this.userRepository = userRepository;
   }
 
+  async findById(id) {
+    const user = await this.userRepository.findById(id);
+    if (!user) {
+      throw new Error('Usuario no encontrado');
+    }
+    return user;
+  }
+  
   async login(email, password) {
     const user = await this.userRepository.findByEmail(email);
 
@@ -20,7 +28,7 @@ class AuthService {
       await this.userRepository.logAttempt(email, fecha, false);
       throw new Error('Credenciales inválidas');
     }
-    
+
     await this.userRepository.logAttempt(email, fecha, true);
     return { id: user.id };
   }
