@@ -17,5 +17,8 @@
   "devDependencies": {
     "concurrently": "^8.2.2",
     "wait-on": "^9.0.1"
+  },
+  "dependencies": {
+    "uuid": "^13.0.0"
   }
 }

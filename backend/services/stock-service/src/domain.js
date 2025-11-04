@@ -4,8 +4,7 @@ class StockDomain {
     this.repository = repository;
   }
 
-  // Caso de uso: datos para la gráfica del MenuPage
-  // Recibe: symbol, days
+  // === Caso de uso: datos históricos para gráfica ===
   async getMenuGraphData(symbol, days = 30) {
     const to = new Date();
     const from = new Date();
@@ -17,59 +16,51 @@ class StockDomain {
     return { symbol, labels, data };
   }
 
-  // Caso de uso: obtener las compañías más rentables en LATAM
-
-  async getTopCompaniesLatam(countries = ["BR", "MX", "CL", "AR", "CO"], topN = 5) {
-    const sampleSymbols = {
-      BR: ["VALE", "PETR4.SA", "ITUB4.SA", "BBDC4.SA"],
-      MX: ["GFNORTEO.MX", "BIMBOA.MX", "AMXL.MX", "AMX"],
-      CL: ["SQMBCO.CL", "FALABELLA.SN", "BSANTANDER.SN"],
-      AR: ["GGAL.BA", "MELI", "BMA", "ALUA.BA"],
-      CO: ["EC", "NUTRESA", "AVAL", "PFBCOLOM"],
-    };
-
+  // === Caso de uso: obtener las compañías LATAM y principales mercados ===
+  async getTopCompaniesLatam(
+    countries = ["CO", "PE", "EC", "VE", "MX", "BR", "AR", "CL", "US", "EU", "ASIA"],
+    topN = 5
+  ) {
     const results = [];
+
     for (const country of countries) {
-      const symbols = sampleSymbols[country] || [];
+      const symbols = this.yahoo.getSymbolsByCountry(country);
+      console.log(`[STOCK DOMAIN] Procesando país: ${country} (${symbols.length} símbolos)`);
       if (symbols.length === 0) {
         results.push({ country, companies: [] });
         continue;
       }
 
+      // Consultamos los símbolos de cada país/mercado
       const settled = await Promise.allSettled(
-        symbols.map((sym) => this.yahoo.getQuote(sym))
+        symbols.map((s) => this.yahoo.getQuote(s))
       );
 
-      const metrics = settled
-        .map((r, idx) =>
-          r.status === "fulfilled"
-            ? {
-              symbol: symbols[idx],
-              name:
-                r.value?.price?.shortName ||
-                r.value?.price?.longName ||
-                symbols[idx],
-              price: r.value?.price?.regularMarketPrice ?? null,
-              change: r.value?.price?.regularMarketChangePercent ?? null,
-            }
-            : null
-        )
-        .filter(Boolean)
-        .sort((a, b) => (b.change ?? -Infinity) - (a.change ?? -Infinity));
+      const companies = settled
+        .map((r) => r.value)
+        .filter((c) => c !== null)
+        .sort((a, b) => (b.change ?? -Infinity) - (a.change ?? -Infinity))
+        .slice(0, topN);
 
-      results.push({
+      // Agregamos país y metadatos
+      const formatted = companies.map((c) => ({
+        ...c,
         country,
-        companies: topN ? metrics.slice(0, topN) : metrics,
-      });
+        market: c.market || "LATAM",
+        currency: c.currency || "USD",
+      }));
+
+      results.push({ country, companies: formatted });
     }
 
     return results;
   }
 
+  // === CRUD de órdenes ===
   async placeOrder(investor, broker, ticker, side, qty, type) {
-    if (!investor || !broker || !ticker || !side || !qty) {
+    if (!investor || !broker || !ticker || !side || !qty)
       throw new Error("Datos incompletos para crear la orden.");
-    }
+
     return this.repository.addOrder(
       investor,
       broker,

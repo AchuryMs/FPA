@@ -1,23 +1,23 @@
 import React from "react";
 import styles from "./StockCard.module.css";
 
-export function StockCard({ company }) {
+export function StockCard({ company, currencySymbol, onSelect }) {
   return (
-    <div className={styles.card}>
+    <div className={styles.card} onClick={() => onSelect(company)}>
       <div className={styles.header}>
-        <h3>{company.symbol}</h3>
-        <span className={styles.country}>{company.country}</span>
+        <h4>{company.name}</h4>
+        <span className={styles.symbol}>{company.symbol}</span>
       </div>
-      <p className={styles.name}>{company.name}</p>
-      <div className={styles.priceInfo}>
-        <span className={styles.price}>${company.price?.toFixed(2) ?? "N/A"}</span>
-        <span
-          className={`${styles.change} ${
-            company.change >= 0 ? styles.positive : styles.negative
+
+      <div className={styles.price}>
+        {currencySymbol} {company.price?.toFixed(2) || "--"}
+      </div>
+
+      <div
+        className={`${styles.change} ${company.change > 0 ? styles.positive : styles.negative
           }`}
-        >
-          {company.change?.toFixed(2)} ({company.percent?.toFixed(2)}%)
-        </span>
+      >
+        {(company.change * 100).toFixed(2)}%
       </div>
     </div>
   );

@@ -1,3 +1,9 @@
+let uuidv4;
+(async () => {
+  const { v4 } = await import("uuid");
+  uuidv4 = v4;
+})();
+
 const mysql = require("mysql2/promise");
 const { PortfolioRepository } = require("./repository");
 
@@ -10,13 +16,25 @@ const pool = mysql.createPool({
 });
 
 class MySQLPortfolioRepository extends PortfolioRepository {
+  // === Crear orden con UUID generado desde Node ===
   async createOrder(order) {
-    const [result] = await pool.query(
-      `INSERT INTO portfolio_orders (investor_id, ticker, qty, type, side, requested_price, status)
-       VALUES (?, ?, ?, ?, ?, ?, ?)`,
-      [order.investorId, order.ticker, order.qty, order.type, order.side, order.requestedPrice, order.status]
+    const orderId = uuidv4();
+    await pool.query(
+      `INSERT INTO portfolio_orders (id, investor_id, ticker, qty, type, side, requested_price, status)
+       VALUES (?, ?, ?, ?, ?, ?, ?, ?)`,
+      [
+        orderId,
+        order.investorId,
+        order.ticker,
+        order.qty,
+        order.type,
+        order.side,
+        order.requestedPrice,
+        order.status,
+      ]
     );
-    return result.insertId;
+    console.log(`[PORTFOLIO] Orden creada con UUID: ${orderId}`);
+    return orderId;
   }
 
   async updateOrderStatus(id, status, brokerId = null) {
@@ -27,7 +45,10 @@ class MySQLPortfolioRepository extends PortfolioRepository {
   }
 
   async getOrderById(id) {
-    const [rows] = await pool.query(`SELECT * FROM portfolio_orders WHERE id = ?`, [id]);
+    const [rows] = await pool.query(
+      `SELECT * FROM portfolio_orders WHERE id = ?`,
+      [id]
+    );
     return rows;
   }
 
@@ -39,7 +60,7 @@ class MySQLPortfolioRepository extends PortfolioRepository {
     return rows;
   }
 
-  // === Posiciones ===
+  // === Actualizar o crear posición ===
   async upsertPosition(investorId, ticker, qty, price, side) {
     const [rows] = await pool.query(
       `SELECT * FROM positions WHERE investor_id = ? AND ticker = ?`,
@@ -50,9 +71,12 @@ class MySQLPortfolioRepository extends PortfolioRepository {
       if (rows.length > 0) {
         const existing = rows[0];
         const newQty = existing.qty + qty;
-        const newAvg = (existing.avg_price * existing.qty + price * qty) / newQty;
+        const newAvg =
+          (existing.avg_price * existing.qty + price * qty) / newQty;
+
         await pool.query(
-          `UPDATE positions SET qty = ?, avg_price = ?, last_updated = NOW()
+          `UPDATE positions
+           SET qty = ?, avg_price = ?, last_updated = NOW()
            WHERE investor_id = ? AND ticker = ?`,
           [newQty, newAvg, investorId, ticker]
         );
@@ -64,7 +88,8 @@ class MySQLPortfolioRepository extends PortfolioRepository {
         );
       }
     } else if (side === "sell") {
-      if (rows.length === 0) throw new Error("No hay posición para vender.");
+      if (rows.length === 0)
+        throw new Error("No hay posición para vender.");
       const existing = rows[0];
       const newQty = existing.qty - qty;
       if (newQty <= 0) {
@@ -74,7 +99,8 @@ class MySQLPortfolioRepository extends PortfolioRepository {
         );
       } else {
         await pool.query(
-          `UPDATE positions SET qty = ?, last_updated = NOW()
+          `UPDATE positions
+           SET qty = ?, last_updated = NOW()
            WHERE investor_id = ? AND ticker = ?`,
           [newQty, investorId, ticker]
         );
@@ -92,7 +118,8 @@ class MySQLPortfolioRepository extends PortfolioRepository {
 
   async logAudit(orderId, event, eventBy, notes) {
     await pool.query(
-      `INSERT INTO order_audit (order_id, event, event_by, notes) VALUES (?, ?, ?, ?)`,
+      `INSERT INTO order_audit (order_id, event, event_by, notes)
+       VALUES (?, ?, ?, ?)`,
       [orderId, event, eventBy, notes]
     );
   }

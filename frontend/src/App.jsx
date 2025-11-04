@@ -4,8 +4,9 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 // ✅ Importar desde las nuevas rutas (según tu estructura modular)
 import LoginPage from "./features/auth/Login/LoginPage.jsx";
 import RegisterPage from "./features/auth/Register/RegisterPage.jsx";
+import PortfolioPage from "./features/portfolio/PortfolioPage.jsx";
 import DashboardPage from "./features/dashboard/DashboardPage.jsx";
-import { PrivateRoute } from "./components/PrivateRoute.jsx"; // o donde lo guardaste
+import { PrivateRoute } from "./components/PrivateRoute.jsx";
 
 export default function App() {
   return (
@@ -28,7 +29,16 @@ export default function App() {
           }
         />
 
-        {/* Catch-all: si entra a una ruta inexistente */}
+        <Route
+          path="/portfolio"
+          element={
+            <PrivateRoute>
+              <PortfolioPage />
+            </PrivateRoute>
+          }
+        />
+
+        {/* Si entra a una ruta inexistente */}
         <Route path="*" element={<h2>Página no encontrada</h2>} />
       </Routes>
     </BrowserRouter>

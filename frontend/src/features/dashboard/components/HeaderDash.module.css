@@ -2,40 +2,31 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background: #1f2937;
-  color: #fff;
-  padding: 1rem 1.5rem;
-  border-radius: 10px;
+  padding: 1rem 2rem;
+  background: #f5f7fa;
+  border-bottom: 1px solid #e0e0e0;
 }
 
-.title {
-  font-size: 1.5rem;
-  font-weight: 600;
-}
-
-.userInfo {
+.userSection {
   display: flex;
+  align-items: center;
   gap: 1rem;
-  font-size: 0.9rem;
 }
 
-.role {
-  background: #3b82f6;
-  padding: 0.25rem 0.5rem;
-  border-radius: 6px;
-}
-.portfolioInfo {
-  display: flex;
-  gap: 1.5rem;
-  font-size: 0.9rem;
-}
-
-.label {
-  color: #d1d5db;
-  margin-right: 0.25rem;
+.countryBtn {
+  border: none;
+  background: #ffffff;
+  padding: 0.5rem 0.9rem;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 1rem;
+  box-shadow: 0 0 4px rgba(0, 0, 0, 0.1);
 }
 
-.value {
-  font-weight: 600;
-  color: #f9fafb;
+.countryBtn:hover {
+  background: #e3f2fd;
+}
+
+.userName {
+  font-weight: 500;
 }
