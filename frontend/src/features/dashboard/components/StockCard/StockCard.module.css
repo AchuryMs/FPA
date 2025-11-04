@@ -1,0 +1,45 @@
+.card {
+  background: white;
+  border-radius: 12px;
+  padding: 1rem;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+  transition: transform 0.2s ease;
+}
+.card:hover {
+  transform: scale(1.02);
+}
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.country {
+  font-size: 0.8rem;
+  background: #e5e7eb;
+  padding: 0.1rem 0.4rem;
+  border-radius: 4px;
+  color: #374151;
+}
+.name {
+  color: #4b5563;
+  margin: 0.5rem 0;
+}
+.priceInfo {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-weight: 500;
+}
+.price {
+  color: #111827;
+  font-size: 1.2rem;
+}
+.change {
+  font-size: 0.9rem;
+}
+.positive {
+  color: #16a34a;
+}
+.negative {
+  color: #dc2626;
+}
