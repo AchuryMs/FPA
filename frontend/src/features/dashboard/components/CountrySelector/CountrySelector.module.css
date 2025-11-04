@@ -1,0 +1,57 @@
+.overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 50;
+}
+
+.modal {
+  background: #fff;
+  padding: 2rem 3rem;
+  border-radius: 16px;
+  max-width: 700px;
+  width: 90%;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+  text-align: center;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  gap: 1rem;
+  margin-top: 1.5rem;
+}
+
+.countryBtn {
+  background: #f8f9fa;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  padding: 0.7rem;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-size: 0.9rem;
+  transition: 0.2s ease;
+}
+
+.countryBtn:hover {
+  background: #eef2f7;
+  transform: translateY(-2px);
+}
+
+.active {
+  border: 2px solid #1e88e5;
+  background: #e3f2fd;
+}
+
+.flag {
+  font-size: 1.8rem;
+}
+
+.name {
+  margin-top: 0.3rem;
+}

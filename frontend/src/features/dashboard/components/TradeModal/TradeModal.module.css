@@ -1,0 +1,202 @@
+/* === Fondo de superposición === */
+.overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.55);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  backdrop-filter: blur(3px);
+}
+
+/* === Contenedor principal del modal === */
+.modal {
+  background: #1f2937;
+  color: #f9fafb;
+  border-radius: 16px;
+  padding: 24px;
+  width: 420px;
+  max-width: 90%;
+  box-shadow: 0 4px 25px rgba(0, 0, 0, 0.35);
+  position: relative;
+  animation: fadeIn 0.3s ease;
+}
+
+/* Animación de entrada */
+@keyframes fadeIn {
+  from {
+    transform: scale(0.95);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+/* === Encabezado === */
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.header h2 {
+  font-size: 1.25rem;
+  font-weight: 600;
+}
+
+.closeBtn {
+  background: transparent;
+  color: #9ca3af;
+  border: none;
+  font-size: 1.2rem;
+  cursor: pointer;
+  transition: color 0.2s;
+}
+
+.closeBtn:hover {
+  color: #f87171;
+}
+
+/* === Información general === */
+.symbol {
+  font-size: 0.95rem;
+  color: #d1d5db;
+  margin-bottom: 12px;
+}
+
+/* === Gráfico === */
+.chartContainer {
+  background: #111827;
+  padding: 12px;
+  border-radius: 8px;
+  margin-bottom: 16px;
+}
+
+/* === Controles === */
+.controls {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  margin-top: 10px;
+}
+
+.input {
+  width: 100%;
+  padding: 10px 12px;
+  border-radius: 8px;
+  border: 1px solid #374151;
+  background: #111827;
+  color: #f9fafb;
+  font-size: 1rem;
+  text-align: center;
+  outline: none;
+  transition: border 0.2s ease;
+}
+
+.input:focus {
+  border-color: #3b82f6;
+}
+
+/* === Botones === */
+.buttons {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+}
+
+.btn {
+  flex: 1;
+  padding: 10px 14px;
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.25s ease, transform 0.15s ease;
+}
+
+/* === Botón de compra === */
+.buy {
+  background: #22c55e;
+  color: white;
+}
+
+.buy:hover {
+  background: #16a34a;
+  transform: translateY(-1px);
+}
+
+/* === Botón de venta === */
+.sell {
+  background: #ef4444;
+  color: white;
+}
+
+.sell:hover {
+  background: #dc2626;
+  transform: translateY(-1px);
+}
+
+/* === Mensaje de estado === */
+.message {
+  text-align: center;
+  font-size: 0.95rem;
+  margin-top: 12px;
+  padding: 6px;
+  border-radius: 8px;
+}
+
+.message:empty {
+  display: none;
+}
+
+/* === Estados dinámicos === */
+.message:before {
+  content: "📢 ";
+}
+
+@media (max-width: 500px) {
+  .modal {
+    padding: 18px;
+    width: 90%;
+  }
+
+  .header h2 {
+    font-size: 1.1rem;
+  }
+
+  .btn {
+    font-size: 0.95rem;
+    padding: 9px 10px;
+  }
+}
+/* === Spinner central === */
+.spinnerContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 10px;
+}
+
+.spinner {
+  border: 3px solid #374151;
+  border-top: 3px solid #3b82f6;
+  border-radius: 50%;
+  width: 26px;
+  height: 26px;
+  animation: spin 0.9s linear infinite;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}

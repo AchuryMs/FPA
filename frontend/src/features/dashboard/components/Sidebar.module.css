@@ -39,3 +39,39 @@
   margin-top: auto;
   background: #dc2626 !important;
 }
+
+.menu button {
+  width: 100%;
+  text-align: left;
+  padding: 10px 14px;
+  border: none;
+  background: transparent;
+  color: #e5e7eb;
+  cursor: pointer;
+  transition: background 0.2s ease, color 0.2s ease;
+  border-radius: 8px;
+}
+
+.menu button:hover {
+  background: rgba(59, 130, 246, 0.15);
+  color: #ffffff;
+}
+
+/* === Botón activo (ruta actual) === */
+.active {
+  background: #9e6f0a;
+  /* azul principal */
+  color: white;
+  font-weight: 600;
+}
+
+/* Logout diferente */
+.logout {
+  margin-top: 20px;
+  background: #ef4444;
+  color: white;
+}
+
+.logout:hover {
+  background: #dc2626;
+}

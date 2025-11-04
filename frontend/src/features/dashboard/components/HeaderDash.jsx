@@ -1,28 +1,21 @@
 import React from "react";
 import styles from "./HeaderDash.module.css";
 
-export function HeaderDash({ user }) {
-  const totalAssets = user?.portfolio?.length || 0;
-  const totalValue = user?.portfolio?.reduce((acc, p) => acc + (p.value || 0), 0) || 0;
+export function HeaderDash({ user, selectedCountry, onCountryChange }) {
+  const flags = {
+    CO: "🇨🇴", PE: "🇵🇪", EC: "🇪🇨", VE: "🇻🇪",
+    MX: "🇲🇽", BR: "🇧🇷", AR: "🇦🇷", CL: "🇨🇱",
+    US: "🇺🇸", EU: "🇪🇺", ASIA: "🌏"
+  };
 
   return (
     <header className={styles.header}>
-      <div className={styles.left}>
-        <h2 className={styles.title}>Dashboard</h2>
-        <span className={styles.subtitle}>
-          Bienvenido, {user?.email || "usuario"} 👋
-        </span>
-      </div>
-
-      <div className={styles.portfolioInfo}>
-        <div>
-          <span className={styles.label}>Activos:</span>
-          <span className={styles.value}>{totalAssets}</span>
-        </div>
-        <div>
-          <span className={styles.label}>Valor Total:</span>
-          <span className={styles.value}>${totalValue.toFixed(2)}</span>
-        </div>
+      <h1>Andina Trading</h1>
+      <div className={styles.userSection}>
+        <button className={styles.countryBtn} onClick={onCountryChange}>
+          {flags[selectedCountry] || "🌎"} {selectedCountry}
+        </button>
+        <span className={styles.userName}>{user?.email || "Invitado"}</span>
       </div>
     </header>
   );
