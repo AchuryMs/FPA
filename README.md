@@ -1,23 +1,34 @@
-# FPA – Sistema de Gestión Bursátil
+# 💹 FPA – Sistema de Gestión Bursátil
 
-Proyecto académico desarrollado en el marco del caso de estudio “Casa de Valores – Andina Trading”, perteneciente al curso Ingeniería de Software II – Universidad El Bosque.
+Proyecto académico desarrollado en el marco del caso de estudio **“Casa de Valores – Andina Trading”**, perteneciente al curso **Ingeniería de Software II – Universidad El Bosque**.
 
-El sistema permite la simulación y gestión de transacciones bursátiles entre inversionistas, comisionistas y empresas emisoras en un entorno distribuido multi-país (Ecuador, Perú, Venezuela y Colombia), priorizando modularidad, mantenibilidad y escalabilidad controlada.
+El sistema permite la **simulación y gestión de transacciones bursátiles** entre inversionistas, comisionistas y empresas emisoras en un entorno distribuido multi-país (Ecuador, Perú, Venezuela y Colombia), priorizando modularidad, mantenibilidad y escalabilidad controlada.
 
-## Objetivo general
+---
 
-Desarrollar un sistema distribuido que permita la gestión, simulación y consolidación de operaciones bursátiles mediante una arquitectura basada en microservicios, un API Gateway central y un portal web React para inversionistas.
+## 🧭 Objetivo general
 
-Tecnologías principales
-Capa	Tecnología	Descripción
-Frontend	React + Vite	Portal del inversionista y panel de control
-Backend	Node.js + Express (microservicios)	APIs independientes para cada módulo
-Base de Datos	MySQL	Persistencia relacional de datos
-Gateway	Express + http-proxy-middleware	Orquestación de rutas y seguridad
-Orquestación (futuro)	Docker + Docker Compose	Contenedorización del entorno completo
-Control de versiones	GitHub	Gestión del código y CI/CD
-Comunicación	REST API	Interacción entre frontend y servicios
-## Estructura del repositorio
+Desarrollar un **sistema distribuido** que permita la **gestión, simulación y consolidación de operaciones bursátiles** mediante una arquitectura basada en **microservicios**, un **API Gateway** central y un **portal web React** para inversionistas.
+
+---
+
+## ⚙️ Tecnologías principales
+
+| Capa | Tecnología | Descripción |
+|------|-------------|-------------|
+| **Frontend** | React + Vite | Portal del inversionista y panel de control |
+| **Backend** | Node.js + Express (microservicios) | APIs independientes para cada módulo |
+| **Base de Datos** | MySQL | Persistencia relacional de datos |
+| **Gateway** | Express + http-proxy-middleware | Orquestación de rutas y seguridad |
+| **Orquestación (futuro)** | Docker + Docker Compose | Contenedorización del entorno completo |
+| **Control de versiones** | GitHub | Gestión del código y CI/CD |
+| **Comunicación** | REST API | Interacción entre frontend y servicios |
+
+---
+
+## 🏗️ Estructura del repositorio
+
+```
 andina-trading/
 ├── frontend/                    # Portal del Inversionista (React + Vite)
 │   ├── src/
@@ -69,18 +80,13 @@ andina-trading/
 │   └── build-all.sh
 │
 └── README.md
+```
 
-## Módulos principales
-Módulo	Descripción
-Autenticación	Registro, login y validación de usuarios
-Gestión del sistema	Configuración de parámetros, países, ciudades y auditoría
-Inversionistas	Registro y gestión de contratos
-Brokers	Gestión de comisionistas de bolsa
-Órdenes	Procesamiento de compra/venta de acciones
-Bolsa de valores	Comunicación con bolsas locales
-Reportes	Consolidación y generación de informes financieros
-Portal web	Interfaz gráfica para inversionistas (React)
-🧩 Arquitectura de comunicación
+---
+
+## 🧩 Arquitectura de comunicación
+
+```
 [Frontend React]
        │
        ▼
@@ -93,17 +99,44 @@ Portal web	Interfaz gráfica para inversionistas (React)
        ├── /api/brokers     → broker-service
        ├── /api/stocks      → stock-service
        └── /api/reports     → report-service
+```
 
+Cada microservicio mantiene su propia conexión a **MySQL** y es accesible únicamente a través del **Gateway**.
 
-Cada microservicio mantiene su propia conexión a MySQL y es accesible únicamente a través del Gateway.
+---
 
-🚀 Ejecución del proyecto
-🔧 1. Configuración del entorno
-Backend (.env)
+## 🗄️ Base de Datos (MySQL)
 
+El sistema utiliza **MySQL 8.x** como RDBMS principal.
+
+### Archivos relevantes
+- `/database/init.sql` → contiene el esquema de creación de tablas (`users`, `contracts`, `transactions`, etc.).  
+- `/database/seed.sql` → inserta datos iniciales para pruebas.  
+- Cada servicio se conecta a la base mediante su propio pool configurado en `.env`.
+
+### Conexión ejemplo (Node.js)
+```js
+const mysql = require('mysql2/promise');
+
+const pool = mysql.createPool({
+  host: process.env.DB_HOST,
+  user: process.env.DB_USER,
+  password: process.env.DB_PASS,
+  database: process.env.DB_NAME,
+});
+```
+
+---
+
+## 🚀 Ejecución del proyecto
+
+### 🔧 1. Configuración del entorno
+
+#### Backend (.env)
 Ejemplo de variables por servicio:
 
-## Ejemplo para authentication-service
+```env
+# Ejemplo para authentication-service
 PORT=3003
 DB_HOST=localhost
 DB_PORT=3306
@@ -111,102 +144,119 @@ DB_USER=root
 DB_PASS=root
 DB_NAME=andina_auth
 JWT_SECRET=supersecreto123
+```
 
-Frontend (.env)
+#### Frontend (.env)
+```env
 VITE_API_URL=http://localhost:3001/api
+```
 
-🖥️ 2. Ejecución del Backend
+---
+
+### 🖥️ 2. Ejecución del Backend
 
 Abre una terminal por cada servicio:
 
-## Gateway
+```bash
+# Gateway
 cd backend/gateway
 npm install
 npm run dev
 
-## Authentication Service
+# Authentication Service
 cd ../services/authentication-service
 npm install
 npm run dev
 
-## Contract Service
+# Contract Service
 cd ../contract-service
 npm install
 npm run dev
-
+```
 
 Cada servicio se inicia en su propio puerto:
+- Gateway → `http://localhost:3001`
+- Auth Service → `http://localhost:3003`
+- Contract Service → `http://localhost:3005`
 
-Gateway → http://localhost:3001
+---
 
-Auth Service → http://localhost:3003
+### 💻 3. Ejecución del Frontend
 
-Contract Service → http://localhost:3005
-
-## 3. Ejecución del Frontend
+```bash
 cd frontend
 npm install
 npm run dev
-
+```
 
 El portal quedará disponible en:
-
+```
 http://localhost:5173
+```
 
-## Endpoints principales
-## Auth Service (/api/auth)
-Método	Endpoint	Descripción
-POST	/api/auth/register	Registro de usuario
-POST	/api/auth/login	Inicio de sesión
-GET	/api/auth/me	Información del usuario autenticado
-GET	/api/auth/role?id=<id>	Rol de usuario
-GET	/api/auth/test	Verificación de servicio
-## Contract Service (/api/contracts)
-Método	Endpoint	Descripción
-GET	/api/contracts	Listar contratos
-POST	/api/contracts	Crear contrato
-GET	/api/contracts/:id	Consultar contrato
-PUT	/api/contracts/:id	Actualizar contrato
+---
+
+## 📡 Endpoints principales
+
+### 🔑 Auth Service (`/api/auth`)
+| Método | Endpoint | Descripción |
+|---------|-----------|-------------|
+| `POST` | `/api/auth/register` | Registro de usuario |
+| `POST` | `/api/auth/login` | Inicio de sesión |
+| `GET` | `/api/auth/me` | Información del usuario autenticado |
+| `GET` | `/api/auth/role?id=<id>` | Rol de usuario |
+| `GET` | `/api/auth/test` | Verificación de servicio |
+
+### 📄 Contract Service (`/api/contracts`)
+| Método | Endpoint | Descripción |
+|---------|-----------|-------------|
+| `GET` | `/api/contracts` | Listar contratos |
+| `POST` | `/api/contracts` | Crear contrato |
+| `GET` | `/api/contracts/:id` | Consultar contrato |
+| `PUT` | `/api/contracts/:id` | Actualizar contrato |
 
 (Otros servicios siguen estructura similar.)
 
-## Convenciones de trabajo
-Ramas
+---
+
+## 🧠 Convenciones de trabajo
+
+### Ramas
+```
 main                  # Rama estable
 dev                   # Integración de features
 feature/<nombre>      # Nuevas funciones
 fix/<nombre>          # Correcciones
 docs/<tema>           # Documentación
+```
 
-Commits
-
+### Commits
 Prefijos recomendados:
-
+```
 feat: nueva funcionalidad
 fix: corrección de errores
 docs: cambios en documentación
 refactor: mejora interna
 chore: tareas menores
+```
 
-🧩 Próximos pasos
+---
 
-Conexión del frontend con el gateway vía Axios (VITE_API_URL).
+## 🧩 Próximos pasos
 
-Integración de Docker Compose para levantar todos los servicios.
+- Conexión del frontend con el gateway vía Axios (`VITE_API_URL`).
+- Integración de Docker Compose para levantar todos los servicios.
+- Implementación de autenticación JWT en frontend.
+- Pruebas unitarias de microservicios con Jest/Supertest.
 
-Implementación de autenticación JWT en frontend.
+---
 
-Pruebas unitarias de microservicios con Jest/Supertest.
+## 👥 Autores
 
-## Autores
+Proyecto desarrollado por el equipo del curso **Ingeniería de Software II – Universidad El Bosque**  
+**Caso de estudio:** *Casa de Valores Andina Trading*
 
-Proyecto desarrollado por el equipo del curso Ingeniería de Software II – Universidad El Bosque
-Caso de estudio: Casa de Valores Andina Trading
-
-Integrantes:
-
-Karen Ximena Buitrago
-
-Andrés Felipe Cuta
-
-Miguel Ángel Sánchez
+**Integrantes:**
+- Karen Buitrago  
+- Andrés Cuta  
+- Miguel Sánchez  
