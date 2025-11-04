@@ -1,0 +1,41 @@
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #1f2937;
+  color: #fff;
+  padding: 1rem 1.5rem;
+  border-radius: 10px;
+}
+
+.title {
+  font-size: 1.5rem;
+  font-weight: 600;
+}
+
+.userInfo {
+  display: flex;
+  gap: 1rem;
+  font-size: 0.9rem;
+}
+
+.role {
+  background: #3b82f6;
+  padding: 0.25rem 0.5rem;
+  border-radius: 6px;
+}
+.portfolioInfo {
+  display: flex;
+  gap: 1.5rem;
+  font-size: 0.9rem;
+}
+
+.label {
+  color: #d1d5db;
+  margin-right: 0.25rem;
+}
+
+.value {
+  font-weight: 600;
+  color: #f9fafb;
+}

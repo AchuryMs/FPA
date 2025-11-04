@@ -1,0 +1,57 @@
+.dashboardContainer {
+  display: flex;
+  min-height: 100vh;
+  background-color: #f9fafb;
+}
+
+.mainContent {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  padding: 1rem 2rem;
+}
+
+.cardsSection {
+  margin-top: 1.5rem;
+}
+/* Loader styles */
+.loaderContainer {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background: #f9fafb;
+  color: #374151;
+  font-size: 1.1rem;
+}
+
+.spinner {
+  width: 48px;
+  height: 48px;
+  border: 5px solid #d1d5db;
+  border-top-color: #3b82f6;
+  border-radius: 50%;
+  animation: spin 0.9s linear infinite;
+  margin-bottom: 1rem;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.sectionTitle {
+  margin-top: 2rem;
+  margin-bottom: 1rem;
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #111827;
+}
+
+.stocksGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 1rem;
+}

@@ -1,0 +1,21 @@
+.cardsGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 1rem;
+}
+
+.card {
+  background: white;
+  border-radius: 12px;
+  padding: 1rem;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+.card h3 {
+  margin-bottom: 0.5rem;
+  color: #111827;
+}
+
+.card p {
+  color: #4b5563;
+}

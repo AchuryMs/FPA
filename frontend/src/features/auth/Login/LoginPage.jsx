@@ -1,8 +1,8 @@
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import "./LoginPage.css";
-import { apiFetch } from "../services/api.js";
+import { apiFetch } from "../../../services/api.js";
 
 export default function LoginPage() {
   const navigate = useNavigate();
@@ -26,7 +26,7 @@ export default function LoginPage() {
         if (me?.user?.user_type) {
           localStorage.setItem("userRole", me.user.user_type);
         }
-        navigate("/menu");
+        navigate("/dashboard");
       } else {
         setError(data.message || "Credenciales incorrectas");
       }
@@ -35,6 +35,16 @@ export default function LoginPage() {
       setError("Error de conexión");
     }
   };
+
+//PAra que muestre mensaje de expiracion
+  useEffect(() => {
+  const msg = localStorage.getItem("sessionExpired");
+  if (msg) {
+    setError(msg);
+    localStorage.removeItem("sessionExpired");
+  }
+}, []);
+
 
   return (
     <div className="login-bg">
