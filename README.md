@@ -1,172 +1,212 @@
-# 💹 FPA – Sistema de Gestión Bursátil
+# FPA – Sistema de Gestión Bursátil
 
-Proyecto académico desarrollado en el marco del **Caso de Estudio: Casa de Valores – Andina Trading**, perteneciente al curso **Ingeniería de Software II (Universidad El Bosque)**.
+Proyecto académico desarrollado en el marco del caso de estudio “Casa de Valores – Andina Trading”, perteneciente al curso Ingeniería de Software II – Universidad El Bosque.
 
-El sistema tiene como objetivo **gestionar la transacción de acciones** dentro de un entorno bursátil distribuido entre cuatro países (Ecuador, Perú, Venezuela y Colombia), permitiendo la interacción entre **inversionistas, comisionistas de bolsa y empresas emisoras de acciones**.
+El sistema permite la simulación y gestión de transacciones bursátiles entre inversionistas, comisionistas y empresas emisoras en un entorno distribuido multi-país (Ecuador, Perú, Venezuela y Colombia), priorizando modularidad, mantenibilidad y escalabilidad controlada.
 
----
+## Objetivo general
 
-## 🧩 Objetivo general
+Desarrollar un sistema distribuido que permita la gestión, simulación y consolidación de operaciones bursátiles mediante una arquitectura basada en microservicios, un API Gateway central y un portal web React para inversionistas.
 
-Desarrollar un **sistema distribuido** que permita la **simulación, gestión y consolidación de transacciones bursátiles**, garantizando modularidad, mantenibilidad y escalabilidad limitada según el alcance académico del proyecto.
-
----
-
-## ⚙️ Tecnologías principales
-
-| Capa | Tecnología | Descripción |
-|------|-------------|-------------|
-| **Frontend** | React + Vite | Portal del Inversionista |
-| **Backend** | Node.js + Express | API y microservicios |
-| **Base de Datos** | MySQL | Persistencia de datos |
-| **Orquestación** | Docker (futuro) | Contenedores y redes de servicios |
-| **Gestión de código** | GitHub | Control de versiones y CI/CD |
-| **Comunicación** | REST API | Conexión entre servicios y frontend |
-
----
-
-## 🏗️ Estructura del repositorio
-
-```
+Tecnologías principales
+Capa	Tecnología	Descripción
+Frontend	React + Vite	Portal del inversionista y panel de control
+Backend	Node.js + Express (microservicios)	APIs independientes para cada módulo
+Base de Datos	MySQL	Persistencia relacional de datos
+Gateway	Express + http-proxy-middleware	Orquestación de rutas y seguridad
+Orquestación (futuro)	Docker + Docker Compose	Contenedorización del entorno completo
+Control de versiones	GitHub	Gestión del código y CI/CD
+Comunicación	REST API	Interacción entre frontend y servicios
+## Estructura del repositorio
 andina-trading/
-├── frontend/                    # Portal del Inversionista (React)
-│   ├── public/
+├── frontend/                    # Portal del Inversionista (React + Vite)
 │   ├── src/
-│   │   ├── assets/
 │   │   ├── components/
 │   │   ├── pages/
-│   │   ├── services/           # conexión al backend (axios / fetch)
-│   │   ├── hooks/
+│   │   ├── services/            # Conexión con Gateway (axios)
 │   │   ├── context/
 │   │   └── App.jsx
-│   ├── package.json
 │   ├── vite.config.js
+│   ├── package.json
 │   └── .env.example
 │
-├── backend/                     # API y microservicios
-│   ├── gateway/                # API Gateway
-│   │   ├── src/
-│   │   │   ├── routes/
-│   │   │   ├── middlewares/
-│   │   │   ├── controllers/
-│   │   │   └── app.js
+├── backend/                     # Backend y microservicios
+│   ├── gateway/                 # API Gateway
+│   │   ├── proxy.js
+│   │   ├── app.js
 │   │   ├── package.json
 │   │   └── .env.example
 │   │
 │   ├── services/
-│   │   ├── auth-service/       # Login y gestión de usuarios
-│   │   ├── investor-service/   # Gestión de inversionistas y contratos
-│   │   ├── broker-service/     # Gestión de comisionistas
-│   │   ├── stock-service/      # Conexión con la bolsa
-│   │   └── report-service/     # Generación de reportes
+│   │   ├── authentication-service/   # Login y registro de usuarios
+│   │   ├── contract-service/         # Gestión de contratos e inversionistas
+│   │   ├── broker-service/           # Gestión de comisionistas
+│   │   ├── stock-service/            # Conexión con bolsas locales
+│   │   └── report-service/           # Generación de informes
 │   │
-│   ├── common/                 # Código compartido entre servicios
+│   ├── common/                       # Código compartido
 │   │   ├── utils/
 │   │   ├── constants/
-│   │   ├── types/
 │   │   └── database/
-│   │       ├── db.js           # Conexión MySQL central
-│   │       └── models/
+│   │       └── db.js
 │   │
-│   └── docker-compose.yml      # Orquestación backend (futuro)
+│   └── docker-compose.yml            # (Futuro) Orquestación de microservicios
 │
 ├── database/
-│   ├── init.sql                # Script de creación de tablas
-│   ├── seed.sql                # Datos iniciales
+│   ├── init.sql                      # Creación de tablas
+│   ├── seed.sql                      # Datos iniciales
 │   └── README.md
 │
-├── docs/                        # Documentación del proyecto
+├── docs/
 │   ├── arquitectura.md
 │   ├── requerimientos.md
 │   ├── plan-calidad.md
 │   └── presentacion.pptx
 │
-├── scripts/                     # Utilidades de desarrollo y despliegue
+├── scripts/                          # Utilidades
 │   ├── start-dev.sh
 │   ├── test-all.sh
 │   └── build-all.sh
 │
-├── .gitignore
-├── README.md
-└── LICENSE
-```
+└── README.md
 
----
+## Módulos principales
+Módulo	Descripción
+Autenticación	Registro, login y validación de usuarios
+Gestión del sistema	Configuración de parámetros, países, ciudades y auditoría
+Inversionistas	Registro y gestión de contratos
+Brokers	Gestión de comisionistas de bolsa
+Órdenes	Procesamiento de compra/venta de acciones
+Bolsa de valores	Comunicación con bolsas locales
+Reportes	Consolidación y generación de informes financieros
+Portal web	Interfaz gráfica para inversionistas (React)
+🧩 Arquitectura de comunicación
+[Frontend React]
+       │
+       ▼
+ ┌───────────────┐
+ │ API Gateway   │  ← http://localhost:3001
+ └───────────────┘
+       │
+       ├── /api/auth        → authentication-service (3003)
+       ├── /api/contracts   → contract-service (3005)
+       ├── /api/brokers     → broker-service
+       ├── /api/stocks      → stock-service
+       └── /api/reports     → report-service
 
-## 🌐 Módulos principales
 
-| Módulo | Descripción |
-|---------|--------------|
-| **Gestión del sistema** | Configuración general, parámetros, ciudades, países, auditoría y respaldo |
-| **Conexión con bolsa de valores** | Comunicación con las bolsas locales en tiempo real |
-| **Recepción de inversionistas** | Registro, contratos y cuentas de inversión |
-| **Portal del inversionista** | Interfaz web para realizar operaciones de compra/venta |
-| **Órdenes de compra/venta** | Procesamiento de transacciones bursátiles |
-| **Consolidación de información** | Recolección y centralización de datos financieros |
-| **Reportes** | Generación de informes y estadísticas |
+Cada microservicio mantiene su propia conexión a MySQL y es accesible únicamente a través del Gateway.
 
----
+🚀 Ejecución del proyecto
+🔧 1. Configuración del entorno
+Backend (.env)
 
-## 🧠 Convenciones de trabajo
+Ejemplo de variables por servicio:
 
-### Ramas
+## Ejemplo para authentication-service
+PORT=3003
+DB_HOST=localhost
+DB_PORT=3306
+DB_USER=root
+DB_PASS=root
+DB_NAME=andina_auth
+JWT_SECRET=supersecreto123
 
-```
+Frontend (.env)
+VITE_API_URL=http://localhost:3001/api
+
+🖥️ 2. Ejecución del Backend
+
+Abre una terminal por cada servicio:
+
+## Gateway
+cd backend/gateway
+npm install
+npm run dev
+
+## Authentication Service
+cd ../services/authentication-service
+npm install
+npm run dev
+
+## Contract Service
+cd ../contract-service
+npm install
+npm run dev
+
+
+Cada servicio se inicia en su propio puerto:
+
+Gateway → http://localhost:3001
+
+Auth Service → http://localhost:3003
+
+Contract Service → http://localhost:3005
+
+## 3. Ejecución del Frontend
+cd frontend
+npm install
+npm run dev
+
+
+El portal quedará disponible en:
+
+http://localhost:5173
+
+## Endpoints principales
+## Auth Service (/api/auth)
+Método	Endpoint	Descripción
+POST	/api/auth/register	Registro de usuario
+POST	/api/auth/login	Inicio de sesión
+GET	/api/auth/me	Información del usuario autenticado
+GET	/api/auth/role?id=<id>	Rol de usuario
+GET	/api/auth/test	Verificación de servicio
+## Contract Service (/api/contracts)
+Método	Endpoint	Descripción
+GET	/api/contracts	Listar contratos
+POST	/api/contracts	Crear contrato
+GET	/api/contracts/:id	Consultar contrato
+PUT	/api/contracts/:id	Actualizar contrato
+
+(Otros servicios siguen estructura similar.)
+
+## Convenciones de trabajo
+Ramas
 main                  # Rama estable
 dev                   # Integración de features
 feature/<nombre>      # Nuevas funciones
 fix/<nombre>          # Correcciones
 docs/<tema>           # Documentación
-```
 
-### Commits
+Commits
 
-Usar prefijos estandarizados:
+Prefijos recomendados:
 
-```
 feat: nueva funcionalidad
 fix: corrección de errores
 docs: cambios en documentación
-refactor: mejora de código
-chore: tareas menores o mantenimiento
-```
+refactor: mejora interna
+chore: tareas menores
 
----
+🧩 Próximos pasos
 
-## ⚡ Configuración de entorno
+Conexión del frontend con el gateway vía Axios (VITE_API_URL).
 
-### Variables para backend
+Integración de Docker Compose para levantar todos los servicios.
 
-Archivo `.env` en cada servicio:
+Implementación de autenticación JWT en frontend.
 
-```env
-DB_HOST=localhost
-DB_USER=root
-DB_PASS=admin
-DB_NAME=andina_trading
-DB_PORT=3306
-PORT=3001
-```
+Pruebas unitarias de microservicios con Jest/Supertest.
 
-### Variables para frontend
+## Autores
 
-Archivo `.env`:
+Proyecto desarrollado por el equipo del curso Ingeniería de Software II – Universidad El Bosque
+Caso de estudio: Casa de Valores Andina Trading
 
-```env
-VITE_API_URL=http://localhost:3000
-```
+Integrantes:
 
----
+Karen Ximena Buitrago
 
-## 🧩 Próximos pasos
+Andrés Felipe Cuta
 
-1. Implementar la conexión con **MySQL** desde `backend/common/database/db.js`.
-2. Crear los **endpoints REST** en el `gateway` y servicios.
-3. Conectar el **frontend** al backend usando `axios`.
-4. Integrar **Docker Compose** para levantar el entorno completo.
-
----
-
-## 👥 Autores
-
-Proyecto desarrollado por el **equipo de Ingeniería de Software II – Universidad El Bosque**, dentro del caso de estudio **Karen Buitrago, Andrés Cuta y Miguel Sánchez**.
+Miguel Ángel Sánchez

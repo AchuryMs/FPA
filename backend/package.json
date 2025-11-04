@@ -9,8 +9,13 @@
     "dev:contract": "cd services/contract-service && npm run dev",
     "dev:stock": "cd services/stock-service && npm run dev",
     "dev:broker": "cd services/broker-service && npm run dev",
-    "dev:all": "npm run dev:gateway & npm run dev:auth & npm run dev:contract & npm run dev:stock & npm run dev:broker"
+    "dev:portfolio": "cd services/portfolio-service && npm run dev",
+    "dev:payment": "cd services/payment-service && npm run dev",
+    "dev:report": "cd services/report-service && npm run dev",
+    "dev:all": "npx concurrently -n GATEWAY,AUTH,CONTRACT,STOCK,BROKER,PORTFOLIO,PAYMENT,REPORT -c blue,green,magenta,yellow,cyan,gray,red,white \"npm run dev:gateway\" \"npm run dev:auth\" \"npm run dev:contract\" \"npm run dev:stock\" \"npm run dev:broker\" \"npm run dev:portfolio\" \"npm run dev:payment\" \"npm run dev:report\""
   },
-  "dependencies": {},
-  "devDependencies": {}
+  "devDependencies": {
+    "concurrently": "^8.2.2",
+    "wait-on": "^9.0.1"
+  }
 }
