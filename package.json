@@ -1,5 +1,20 @@
 {
   "dependencies": {
     "http-proxy-middleware": "^3.0.5"
+  },
+  "devDependencies": {
+    "concurrently": "^9.2.1",
+    "wait-on": "^7.2.0"
+  },
+  "scripts": {
+    "dev:gateway": "npx wait-on tcp:3002 tcp:3003 tcp:3005 tcp:3006 tcp:3007 tcp:3008 tcp:3010 && nodemon gateway/app.js",
+    "dev:auth": "nodemon auth-service/index.js",
+    "dev:stock": "nodemon stock-service/index.js",
+    "dev:contract": "nodemon contract-service/index.js",
+    "dev:broker": "nodemon broker-service/index.js",
+    "dev:portfolio": "nodemon portfolio-service/index.js",
+    "dev:payment": "nodemon payment-service/index.js",
+    "dev:report": "nodemon report-service/index.js",
+    "dev:all": "concurrently \"npm run dev:auth\" \"npm run dev:stock\" \"npm run dev:contract\" \"npm run dev:broker\" \"npm run dev:portfolio\" \"npm run dev:payment\" \"npm run dev:report\" \"npm run dev:gateway\""
   }
 }

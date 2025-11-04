@@ -6,11 +6,16 @@ const authService = new AuthService(new MySQLUserRepository());
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 
+// TEST / HEALTHCHECK
+router.get('/test', (_req, res) => {
+  res.json({ ok: true, message: "Auth service operativo ✅" });
+});
+
+// === LOGIN ===
 router.post('/login', async (req, res) => {
   const { email, password } = req.body;
   try {
     const user = await authService.login(email, password);
-    // Generar token JWT
     const token = jwt.sign({ id: user.id }, process.env.JWT_SECRET || 'clave_secreta', { expiresIn: '2h' });
     res.json({ success: true, user, token });
   } catch (err) {
@@ -18,30 +23,28 @@ router.post('/login', async (req, res) => {
   }
 });
 
-// Obtener datos del usuario a partir del token
+// === DATOS DEL USUARIO ===
 router.get('/me', async (req, res) => {
   const authHeader = req.headers["authorization"];
-  if (!authHeader) {
+  if (!authHeader)
     return res.status(401).json({ success: false, message: "Token no proporcionado" });
-  }
 
   const token = authHeader.split(" ")[1];
-  if (!token) {
+  if (!token)
     return res.status(401).json({ success: false, message: "Formato de token inválido" });
-  }
 
   try {
     const decoded = jwt.verify(token, process.env.JWT_SECRET || "clave_secreta");
     const user = await authService.findById(decoded.id);
-    if (!user) {
+    if (!user)
       return res.status(404).json({ success: false, message: "Usuario no encontrado" });
-    }
     res.json({ success: true, user });
   } catch (err) {
     return res.status(403).json({ success: false, message: "Token inválido o expirado" });
   }
 });
 
+// === ROLE ===
 router.get('/role', async (req, res) => {
   const id = req.query.id;
   try {
@@ -52,16 +55,13 @@ router.get('/role', async (req, res) => {
   }
 });
 
+// === REGISTER ===
 router.post('/register', async (req, res) => {
   const { email, password, confirm } = req.body;
   try {
-    if (password !== confirm) {
-      throw new Error('Las contraseñas no coinciden');
-    }
-    const saltRounds = 10;
-    const passwordHash = await bcrypt.hash(password, saltRounds);
+    if (password !== confirm) throw new Error('Las contraseñas no coinciden');
+    const passwordHash = await bcrypt.hash(password, 10);
     const repo = new MySQLUserRepository();
-
     await repo.register({ email, passwordHash });
     res.json({ success: true, message: 'Usuario registrado correctamente' });
   } catch (err) {
